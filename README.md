@@ -27,6 +27,10 @@
 - Set up Docker and Docker-Compose
 - Setup linting
 
+### Testing
+
+### Linking the Githup repo to DockerHub
+
 
 
 
