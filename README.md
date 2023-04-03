@@ -16,6 +16,8 @@
 - app/core -> code shared between mulitple apps
 - app/user -> user related code
 - app/history -> history related code
+- requirements.txt -> for the application/production
+- requirements.dev.text -> for local development
 
 ## Project Management
 ### Test Driven Development
