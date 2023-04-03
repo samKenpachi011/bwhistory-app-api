@@ -31,6 +31,11 @@
 
 ### Linking the Githup repo to DockerHub
 
+## Contributions
+- After cloning the repo change to the dev branch and create pull requests from there.
+-- git branch -M dev
+
+
 
 
 
