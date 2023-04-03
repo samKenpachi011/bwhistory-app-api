@@ -28,7 +28,7 @@
 - GIT
 - Set up Docker and Docker-Compose
 - Setup linting
-
+@_meSKGH.*19
 ### Testing
 
 ### Linking the Githup repo to DockerHub
