@@ -39,6 +39,7 @@
 
 4. ### Linking the Githup repo to DockerHub
 5. ### Adding a Docker file and dockerignore
+
 **Why Docker**
 - Helps to capture all dependencies as code which leads to consistent development and production environments
 - [Docker Best Practices](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
@@ -65,26 +66,33 @@
 
 | Syntax | Description |
 | ----------- | ----------- |
-| services | Define services that will run containers or any job |
-| build: context: .| Builds the docker file inside the current directory |
-| ports: | Specify port mappings such that we connect port 8000 on our local machine to port 8000 inside the container |
-| volumes: - ./app:/app | Map the local app directory to sync with the running container files |
+| services | Define services that will run containers or any job. |
+| build: context: .| Builds the docker file inside the current directory. |
+| args | Build arguments, which are environment variables accessible only during the build process. |
+| ports: | Specify port mappings such that we connect port 8000 on our local machine to port 8000 inside the container. |
+| volumes: - ./app:/app | Map the local app directory to sync with the running container files. |
 | command: >
- `sh -c "python manage.py runserver 0.0.0.0:8000"` | Command to run the service which can be overridden from the terminal |
+ `sh -c "python manage.py runserver 0.0.0.0:8000"` | Command to run the service which can be overridden from the terminal. |
 
 6. ### Linting
     - [Flake8 Guide](https://flake8.pycqa.org/en/latest/)
     - [Flake8 Configuration](https://flake8.pycqa.org/en/latest/user/configuration.html)
     - Add flake 8 to requirements.dev.txt
     - Add a .flake8 to the app directory
+    - Update docker-compose with the args
+
+    **Using Flake 8**
+    | Syntax | Description |
+    | ----------- | ----------- |
+    | `docker-compose run --rm app sh -c "flake8"`  | Defining the base image |
 
 ## Steps
-- Create the neccessary docker and docker-compose files
-- Add requirements files and create the app directory
-- run `docker build .` to build the docker image
-- run `docker-compose build` to use docker compose to build and tag the image
-- Add flake 8 to requirements.dev.txt and create the .flake8 to ignore application files inside app/ from linting
-
+- Create the neccessary docker and docker-compose files.
+- Add requirements files and create the app directory.
+- run `docker build .` to build the docker image.
+- run `docker-compose build` to use docker compose to build and tag the image.
+- Add flake 8 to requirements.dev.txt and create the .flake8 to ignore application files inside app/ from linting.
+- Add args to the docker-compose file and update the docker file to install dev requirements when in development.
 ## Contributions
 - After cloning the repo change to the dev branch and create pull requests from there.
 -- git branch -M dev
