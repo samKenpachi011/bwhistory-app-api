@@ -31,6 +31,11 @@
     - Setup linting
 
 3. ### Testing
+    - We use the Django test suite and set tests per Django app
+    **Docker file Description**
+    | Syntax | Description |
+    | ----------- | ----------- |
+    | `docker-compose run --rm app sh -c "python manage.py test"` | Using docker-compose to run application tests |
 
 4. ### Linking the Githup repo to DockerHub
 5. ### Adding a Docker file and dockerignore
@@ -67,18 +72,19 @@
 | command: >
  `sh -c "python manage.py runserver 0.0.0.0:8000"` | Command to run the service which can be overridden from the terminal |
 
+6. ### Linting
+    - [Flake8 Guide](https://flake8.pycqa.org/en/latest/)
+    - [Flake8 Configuration](https://flake8.pycqa.org/en/latest/user/configuration.html)
+    - Add flake 8 to requirements.dev.txt
+    - Add a .flake8 to the app directory
+
 ## Steps
 - Create the neccessary docker and docker-compose files
 - Add requirements files and create the app directory
 - run `docker build .` to build the docker image
 - run `docker-compose build` to use docker compose to build and tag the image
-
+- Add flake 8 to requirements.dev.txt and create the .flake8 to ignore application files inside app/ from linting
 
 ## Contributions
 - After cloning the repo change to the dev branch and create pull requests from there.
 -- git branch -M dev
-
-
-
-
-
