@@ -84,7 +84,7 @@
     **Using Flake 8**
     | Syntax | Description |
     | ----------- | ----------- |
-    | `docker-compose run --rm app sh -c "flake8"`  | Defining the base image |
+    | `docker-compose run --rm app sh -c "flake8"`  | Running flake8 |
 
 ## Steps
 - Create the neccessary docker and docker-compose files.
