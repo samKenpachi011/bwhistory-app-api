@@ -29,9 +29,11 @@
     - GIT
     - Set up Docker and Docker-Compose
     - Setup linting
+    - Configure Github actions
 
 3. ### Testing
     - We use the Django test suite and set tests per Django app
+
     **Docker file Description**
     | Syntax | Description |
     | ----------- | ----------- |
@@ -85,6 +87,24 @@
     | Syntax | Description |
     | ----------- | ----------- |
     | `docker-compose run --rm app sh -c "flake8"`  | Running flake8 |
+
+
+
+7. ### Project Structure
+| Syntax | Description |
+| ----------- | ----------- |
+| `docker-compose run --rm app sh -c "django-admin startproject app ."`  | Start project in the current directory |
+
+
+8. ### GitHub Actions
+[Github Actions Guide](https://docs.github.com/en/actions)
+[Action Features](https://github.com/features/actions)
+
+**Why github actions**
+- We use github actions to run jobs for (deployment, unit-tests, code linting)
+- Add steps for running test and linting -> .github/workflows/checks.yml
+- Authenticate with docker hub and add secretsto the github project
+- Update or add the DOCKERHUB_TOKEN and DOCKERHUB_USER secrets on github
 
 ## Steps
 - Create the neccessary docker and docker-compose files.
