@@ -14,7 +14,7 @@ RUN python -m venv /pybha && \
     /pybha/bin/pip install --upgrade pip && \
     /pybha/bin/pip install -r /tmp/requirements.txt && \
     if [ $DEV = "true" ]; \
-        then /pybha/bin/pip install -r requirements.dev.txt ; \
+        then /pybha/bin/pip install -r /tmp/requirements.dev.txt ; \
     fi && \
     rm -rf /tmp && \
     adduser \
