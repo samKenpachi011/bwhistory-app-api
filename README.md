@@ -34,7 +34,25 @@
 3. ### Testing
     - We use the Django test suite and set tests per Django app
 
-    **Docker file Description**
+    **Steps**
+    - Import test classes either SimpleTestCase(no database) or TestCase(database)
+    [Django Testing Tools](https://docs.djangoproject.com/en/4.1/topics/testing/tools/)
+
+    - Import objects to test
+    - Define test class
+    - Add test method that will fail
+    - Setup inputs
+    - Execute code and check failing output
+
+    **Useful Links**
+    - [Unit test](https://docs.python.org/3/library/unittest.html)
+    - [Unit test example 1](https://www.digitalocean.com/community/tutorials/python-unittest-unit-test-example)
+    - [Python testing](https://realpython.com/python-testing/)
+    - [API Testing Guide](https://www.django-rest-framework.org/api-guide/testing/)
+    - [Testing Best Practices](https://realpython.com/testing-in-django-part-1-best-practices-and-examples/)
+
+
+    **Running tests**
     | Syntax | Description |
     | ----------- | ----------- |
     | `docker-compose run --rm app sh -c "python manage.py test"` | Using docker-compose to run application tests |
