@@ -84,6 +84,8 @@
 - [DockerCompose Overview](https://docs.docker.com/compose/)
 - [DockerCompose features](https://docs.docker.com/compose/features-uses/)
 - [Postgres Guide](https://hub.docker.com/_/postgres)
+- [Package installations on alpine](https://linuxopsys.com/topics/install-packages-in-alpine-linux)
+- [PSYCOPG Guide](https://www.psycopg.org/docs/)
 
 | Syntax | Description |
 | ----------- | ----------- |
@@ -98,6 +100,10 @@
 | depends_on | Creates a network link between services |
 | environment | Used to define environment variables |
 | volumes: <volume> | Named volumes are used here to map container files from one service locally |
+
+
+**Why environment variable**
+- Easily passed to docker to be used in both local development and production
 
 6. ### Linting
     - [Flake8 Guide](https://flake8.pycqa.org/en/latest/)
@@ -137,6 +143,7 @@
 - Add flake 8 to requirements.dev.txt and create the .flake8 to ignore application files inside app/ from linting.
 - Add args to the docker-compose file and update the docker file to install dev requirements when in development.
 - Add a database service with environment variables set to the docker-compose file
+- Configure postgresql for django by installing adaptors
 ## Contributions
 - After cloning the repo change to the dev branch and create pull requests from there.
 -- git branch -M dev
