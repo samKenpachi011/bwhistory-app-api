@@ -83,9 +83,11 @@
 **Docker Compose file Description**
 - [DockerCompose Overview](https://docs.docker.com/compose/)
 - [DockerCompose features](https://docs.docker.com/compose/features-uses/)
+- [Postgres Guide](https://hub.docker.com/_/postgres)
 
 | Syntax | Description |
 | ----------- | ----------- |
+| `docker-compose up` | This runs services inside the docker compose file |
 | services | Define services that will run containers or any job. |
 | build: context: .| Builds the docker file inside the current directory. |
 | args | Build arguments, which are environment variables accessible only during the build process. |
@@ -93,6 +95,9 @@
 | volumes: - ./app:/app | Map the local app directory to sync with the running container files. |
 | command: >
  `sh -c "python manage.py runserver 0.0.0.0:8000"` | Command to run the service which can be overridden from the terminal. |
+| depends_on | Creates a network link between services |
+| environment | Used to define environment variables |
+| volumes: <volume> | Named volumes are used here to map container files from one service locally |
 
 6. ### Linting
     - [Flake8 Guide](https://flake8.pycqa.org/en/latest/)
@@ -131,6 +136,7 @@
 - run `docker-compose build` to use docker compose to build and tag the image.
 - Add flake 8 to requirements.dev.txt and create the .flake8 to ignore application files inside app/ from linting.
 - Add args to the docker-compose file and update the docker file to install dev requirements when in development.
+- Add a database service with environment variables set to the docker-compose file
 ## Contributions
 - After cloning the repo change to the dev branch and create pull requests from there.
 -- git branch -M dev
