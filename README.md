@@ -130,6 +130,13 @@
 | Syntax | Description |
 | ----------- | ----------- |
 | `docker-compose run --rm app sh -c "django-admin startproject app ."`  | Start project in the current directory |
+| `docker-compose run --rm app sh -c "django-admin startapp core"`  | Start app |
+
+**Management Commands**
+| file | Description |
+| ----------- | ----------- |
+|  wait_for_db_command.py | We are fixing a database service race issue so that we wait for all the db subfuctions to finish |
+
 
 
 8. ### GitHub Actions
