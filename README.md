@@ -27,10 +27,32 @@
 - app/core/apps
 - app/core/migrations/
 
+
+**Authentication**
+- We are using a custom user model to allow for changes moving forward and also to use an email for the username.
+    - **Custom User Model Classes**
+    - set AUTH_USRE_MODEL in settings.py for django to use the custom user model.
+    | Syntax | Description |
+    | ----------- | ----------- |
+    | AbstractBaseUser | Provides the core implementation of a user model. |
+    | BaseUserManager | Base class for managing users and has helper methods. |
+    | PermissionsMixin | Support for the django permission system. |
+    | UserManager | Allows creation of custom logic for creating objects. |
+    | create_user | Custom method called when creating a user. |
+    | create_superuser | Custom method used to create superusers. |
+
+
 **Migrations**
 -Django handels database structure and changes
 - Migrations are handled by django -> `python manage.py makemigrations`
 - Applying migrations `python manage.py migrate`
+- Using docker compose `docker-compose run --rm app sh -c "python manage.py wait_for_db && python manage.py migrate"`
+
+    - **Migration issues**
+    | Description | Possible Solution |
+    | ----------- | ----------- |
+    | 0001_initial is applied before is dependency | clear the devdb volume|
+
 
 ## Project Management
 1. ### Test Driven Development
@@ -164,7 +186,7 @@
 - Add a database service with environment variables set to the docker-compose file
 - Configure postgresql for django by installing adaptors and update the settings files
 - To fix database race issues create a core app and add a management command to check if the database is ready
-
+- Add a custom authentication user model
 ## Contributions
 - After cloning the repo change to the dev branch and create pull requests from there.
 -- git branch -M dev
