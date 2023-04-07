@@ -27,6 +27,11 @@
 - app/core/apps
 - app/core/migrations/
 
+**Migrations**
+-Django handels database structure and changes
+- Migrations are handled by django -> `python manage.py makemigrations`
+- Applying migrations `python manage.py migrate`
+
 ## Project Management
 1. ### Test Driven Development
 - A development practice to write test for functionalities before implementation
@@ -130,6 +135,13 @@
 | Syntax | Description |
 | ----------- | ----------- |
 | `docker-compose run --rm app sh -c "django-admin startproject app ."`  | Start project in the current directory |
+| `docker-compose run --rm app sh -c "django-admin startapp core"`  | Start app |
+
+**Management Commands**
+| file | Description |
+| ----------- | ----------- |
+|  wait_for_db_command.py | We are fixing a database service race issue so that we wait for all the db subfuctions to finish |
+
 
 
 8. ### GitHub Actions
