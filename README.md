@@ -20,6 +20,13 @@
 - requirements.txt -> for the application/production
 - requirements.dev.text -> for local development
 
+**App structure**
+- app/core/tests/
+- app/core/models
+- app/core/admin
+- app/core/apps
+- app/core/migrations/
+
 ## Project Management
 1. ### Test Driven Development
 - A development practice to write test for functionalities before implementation
@@ -143,7 +150,9 @@
 - Add flake 8 to requirements.dev.txt and create the .flake8 to ignore application files inside app/ from linting.
 - Add args to the docker-compose file and update the docker file to install dev requirements when in development.
 - Add a database service with environment variables set to the docker-compose file
-- Configure postgresql for django by installing adaptors
+- Configure postgresql for django by installing adaptors and update the settings files
+- To fix database race issues create a core app and add a management command to check if the database is ready
+
 ## Contributions
 - After cloning the repo change to the dev branch and create pull requests from there.
 -- git branch -M dev
