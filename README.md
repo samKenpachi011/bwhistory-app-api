@@ -27,6 +27,11 @@
 - app/core/apps
 - app/core/migrations/
 
+**Migrations**
+-Django handels database structure and changes
+- Migrations are handled by django -> `python manage.py makemigrations`
+- Applying migrations `python manage.py migrate`
+
 ## Project Management
 1. ### Test Driven Development
 - A development practice to write test for functionalities before implementation
