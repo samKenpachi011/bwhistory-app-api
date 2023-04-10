@@ -30,8 +30,10 @@
 
 **Authentication**
 - We are using a custom user model to allow for changes moving forward and also to use an email for the username.
+
     - **Custom User Model Classes**
     - set AUTH_USRE_MODEL in settings.py for django to use the custom user model.
+
     | Syntax | Description |
     | ----------- | ----------- |
     | AbstractBaseUser | Provides the core implementation of a user model. |
@@ -49,9 +51,10 @@
 - Using docker compose `docker-compose run --rm app sh -c "python manage.py wait_for_db && python manage.py migrate"`
 
     - **Migration issues**
+
     | Description | Possible Solution |
     | ----------- | ----------- |
-    | 0001_initial is applied before is dependency | clear the devdb volume|
+    | 0001_initial is applied before is dependency | clear the devdb volume |
 
 
 ## Project Management
