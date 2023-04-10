@@ -42,6 +42,8 @@
     | UserManager | Allows creation of custom logic for creating objects. |
     | create_user | Custom method called when creating a user. |
     | create_superuser | Custom method used to create superusers. |
+- Creating a super user `docker-compose run --rm app sh -c "python manage.py createsuperuser`
+<br/>
 
 
 **Migrations**
@@ -55,6 +57,8 @@
     | Description | Possible Solution |
     | ----------- | ----------- |
     | 0001_initial is applied before is dependency | clear the devdb volume |
+
+<br/>
 
 
 ## Project Management
@@ -93,6 +97,8 @@
     | Syntax | Description |
     | ----------- | ----------- |
     | `docker-compose run --rm app sh -c "python manage.py test"` | Using docker-compose to run application tests |
+    | `import pdb; pdb.set_trace()`| Option 1 to debug |
+    | `breakpoint()` | Option 2 to bebug |
 
 4. ### Linking the Githup repo to DockerHub
 5. ### Adding a Docker file and dockerignore
@@ -189,7 +195,7 @@
 - Add a database service with environment variables set to the docker-compose file
 - Configure postgresql for django by installing adaptors and update the settings files
 - To fix database race issues create a core app and add a management command to check if the database is ready
-- Add a custom authentication user model
+- Add a custom authentication user model and include the admin configs (list, add)
 ## Contributions
 - After cloning the repo change to the dev branch and create pull requests from there.
 -- git branch -M dev
