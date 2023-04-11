@@ -71,8 +71,22 @@
     - Set up Docker and Docker-Compose
     - Setup linting
     - Configure Github actions
+<br/>
 
-3. ### Testing
+3. ### Documentation
+**Developers or any user of our APIs needs to know how to use them.**
+- **Documentation is both Manual and Automatic(endpoints) -> tools**
+    - [DRF Spectacular](https://drf-spectacular.readthedocs.io/en/latest/)
+    - [DRF Spectacular benefits](https://levelup.gitconnected.com/drf-spectacular-the-ultimate-tool-for-automated-drf-api-documentation-61bd4cca36b7)
+
+- **What we have documented**
+    - Available endpoints
+    - Application docker configurations
+    - Authentication process
+    - Endpoint payloads and responses
+
+
+4. ### Testing
     - We use the Django test suite and set tests per Django app
 
     **Steps**
@@ -100,8 +114,10 @@
     | `import pdb; pdb.set_trace()`| Option 1 to debug |
     | `breakpoint()` | Option 2 to bebug |
 
-4. ### Linking the Githup repo to DockerHub
-5. ### Adding a Docker file and dockerignore
+5. ### Linking the Githup repo to DockerHub
+<br/>
+
+6. ### Adding a Docker file and dockerignore
 
 **Why Docker**
 - Helps to capture all dependencies as code which leads to consistent development and production environments
@@ -148,7 +164,7 @@
 **Why environment variable**
 - Easily passed to docker to be used in both local development and production
 
-6. ### Linting
+7. ### Linting
     - [Flake8 Guide](https://flake8.pycqa.org/en/latest/)
     - [Flake8 Configuration](https://flake8.pycqa.org/en/latest/user/configuration.html)
     - Add flake 8 to requirements.dev.txt
@@ -159,10 +175,9 @@
     | Syntax | Description |
     | ----------- | ----------- |
     | `docker-compose run --rm app sh -c "flake8"`  | Running flake8 |
+<br/>
 
-
-
-7. ### Project Structure
+8. ### Project Structure
 | Syntax | Description |
 | ----------- | ----------- |
 | `docker-compose run --rm app sh -c "django-admin startproject app ."`  | Start project in the current directory |
@@ -172,10 +187,9 @@
 | file | Description |
 | ----------- | ----------- |
 |  wait_for_db_command.py | We are fixing a database service race issue so that we wait for all the db subfuctions to finish |
+<br/>
 
-
-
-8. ### GitHub Actions
+9. ### GitHub Actions
 [Github Actions Guide](https://docs.github.com/en/actions)
 [Action Features](https://github.com/features/actions)
 
@@ -184,6 +198,9 @@
 - Add steps for running test and linting -> .github/workflows/checks.yml
 - Authenticate with docker hub and add secretsto the github project
 - Update or add the DOCKERHUB_TOKEN and DOCKERHUB_USER secrets on github
+
+
+
 
 ## Steps
 - Create the neccessary docker and docker-compose files.
