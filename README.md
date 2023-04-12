@@ -20,12 +20,19 @@
 - requirements.txt -> for the application/production
 - requirements.dev.text -> for local development
 
-**App structure**
+**Core App structure**
 - app/core/tests/
 - app/core/models
 - app/core/admin
 - app/core/apps
 - app/core/migrations/
+
+**User App/Api**
+    - Used for creating auth tokens, user registration, updating and viewing profiles
+
+    | Syntax | Description |
+    | ----------- | ----------- |
+    | `docker-compose run --rm app sh -c "python manage.py startapp user"`| Create a user app |
 
 
 **Authentication**
