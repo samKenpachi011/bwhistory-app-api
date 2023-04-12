@@ -29,6 +29,7 @@
 
 **User App/Api**
     - Used for creating auth tokens, user registration, updating and viewing profiles
+    - [API Status Codes Guide](https://www.django-rest-framework.org/api-guide/status-codes/)
 
     | Syntax | Description |
     | ----------- | ----------- |
@@ -58,6 +59,7 @@
 - Migrations are handled by django -> `python manage.py makemigrations`
 - Applying migrations `python manage.py migrate`
 - Using docker compose `docker-compose run --rm app sh -c "python manage.py wait_for_db && python manage.py migrate"`
+
 
     - **Migration issues**
 
@@ -220,6 +222,8 @@
 - Configure postgresql for django by installing adaptors and update the settings files
 - To fix database race issues create a core app and add a management command to check if the database is ready
 - Add a custom authentication user model and include the admin configs (list, add)
+- Add a user app for creating users, tokens and managing profiles
+
 ## Contributions
 - After cloning the repo change to the dev branch and create pull requests from there.
 -- git branch -M dev
