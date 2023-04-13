@@ -38,9 +38,11 @@
 
 **Authentication**
 - We are using a custom user model to allow for changes moving forward and also to use an email for the username.
+- We implementing the token authentication for its simplicity and security
+- [Token Authetication Guide](https://www.django-rest-framework.org/api-guide/authentication/#tokenauthentication)
 
     - **Custom User Model Classes**
-    - set AUTH_USRE_MODEL in settings.py for django to use the custom user model.
+    - set AUTH_USER_MODEL in settings.py for django to use the custom user model.
 
     | Syntax | Description |
     | ----------- | ----------- |
@@ -50,6 +52,18 @@
     | UserManager | Allows creation of custom logic for creating objects. |
     | create_user | Custom method called when creating a user. |
     | create_superuser | Custom method used to create superusers. |
+
+    - **User Api**
+    - There are configurations that allow for the management of users
+
+    | Syntax / Files | Description |
+    | ----------- | ----------- |
+    | Serializers | Serializers are responsible for converting complex data <br/>(e.g., querysets and model instances) to native Python datatypes that can then be rendered into <br/>JSON, XML, or other content types.|
+    | Views | Determine how requests will be handled and which policy attributes to use. |
+    | urls.py | We include all the endpoints that have view classess |
+
+
+
 - Creating a super user `docker-compose run --rm app sh -c "python manage.py createsuperuser`
 <br/>
 
