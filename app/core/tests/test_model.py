@@ -3,6 +3,7 @@ Tests for models
 """
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from core import models
 
 
 class ModelTests(TestCase):
@@ -49,3 +50,32 @@ class ModelTests(TestCase):
 
         self.assertTrue(user.is_staff)
         self.assertTrue(user.is_superuser)
+
+    def test_creating_ethnic_group_success(self):
+        """Test to create a ethnic group object"""
+
+        # define the user
+        email = 'test@example.com'
+        password = 'testpass123'
+        user = get_user_model().objects.create_user(
+            email=email,
+            password=password
+        )
+
+        name = 'Tswana'
+        description = 'The Tswana are a Bantu-speaking ethnic group'
+        language = 'Setswana'
+        population = 10*100
+        geography = 'Botswana'
+        history = 'A brief history of the Tswana ethnic group.'
+
+        ethnic_group = models.EthnicGroup.objects.create(
+            user=user,
+            name=name,
+            description=description,
+            language=language,
+            population=population,
+            geography=geography,
+            history=history
+        )
+        self.assertEqual(str(ethnic_group), ethnic_group.name)
