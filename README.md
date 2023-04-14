@@ -27,13 +27,32 @@
 - app/core/apps
 - app/core/migrations/
 
-**User App/Api**
+
+### **EthnicGroup App**
+- Used for creating, updating and viewing ethnic groups.
+
+**EthnicGroup App structure**
+- app/ethnicgroup/tests/
+- app/ethnicgroup/urls
+- app/ethnicgroup/serializers
+- app/ethnicgroup/apps
+- app/ethnicgroup/views
+
+
+
+| Syntax | Description |
+| ----------- | ----------- |
+| `docker-compose run --rm app sh -c "python manage.py startapp user"`| Create a user app |
+
+
+
+**User App**
     - Used for creating auth tokens, user registration, updating and viewing profiles
     - [API Status Codes Guide](https://www.django-rest-framework.org/api-guide/status-codes/)
-
-    | Syntax | Description |
-    | ----------- | ----------- |
-    | `docker-compose run --rm app sh -c "python manage.py startapp user"`| Create a user app |
+<br/>
+| Syntax | Description |
+| ----------- | ----------- |
+| `docker-compose run --rm app sh -c "python manage.py startapp user"`| Create a user app |
 
 
 **Authentication**
@@ -221,9 +240,7 @@
 - Add steps for running test and linting -> .github/workflows/checks.yml
 - Authenticate with docker hub and add secretsto the github project
 - Update or add the DOCKERHUB_TOKEN and DOCKERHUB_USER secrets on github
-
-
-
+<br/>
 
 ## Steps
 - Create the neccessary docker and docker-compose files.
@@ -237,6 +254,7 @@
 - To fix database race issues create a core app and add a management command to check if the database is ready
 - Add a custom authentication user model and include the admin configs (list, add)
 - Add a user app for creating users, tokens and managing profiles
+- Add a ethinic group app for creating,updating and viewing ethinic groups.
 
 ## Contributions
 - After cloning the repo change to the dev branch and create pull requests from there.
