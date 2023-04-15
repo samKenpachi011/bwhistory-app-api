@@ -31,6 +31,3 @@ class EthnicGroupViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         """Create a new ethnic group."""
         serializer.save(user=self.request.user)
-
-
-

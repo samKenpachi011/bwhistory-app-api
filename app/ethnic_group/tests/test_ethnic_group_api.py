@@ -10,7 +10,9 @@ from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
 from core.models import EthnicGroup
 
-from ethnic_group.serializers import EthnicGroupSerializer, EthnicGroupDetailSerializer
+from ethnic_group.serializers import (
+    EthnicGroupSerializer,
+    EthnicGroupDetailSerializer)
 
 
 ETHNIC_GROUP_URL = reverse('ethnic_group:ethnic_group-list')
