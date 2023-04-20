@@ -35,9 +35,22 @@ class EthnicGroup(models.Model):
     population = models.PositiveIntegerField()
     geography = models.CharField(max_length=200)
     history = models.TextField()
+    tags = models.ManyToManyField('Tag')
 
     class Meta:
         verbose_name_plural = "Ethnic Groups"
+
+    def __str__(self):
+        return self.name
+
+
+class Tag(models.Model):
+    """Class representing tags"""
+    name = models.CharField(max_length=100)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
 
     def __str__(self):
         return self.name
