@@ -2,7 +2,7 @@
 Serializer for EthnicGroup Api's
 """
 from rest_framework import serializers
-from core.models import EthnicGroup
+from core.models import EthnicGroup, Tag
 
 
 class EthnicGroupSerializer(serializers.ModelSerializer):
@@ -26,3 +26,12 @@ class EthnicGroupDetailSerializer(EthnicGroupSerializer):
 
     class Meta(EthnicGroupSerializer.Meta):
         fields = EthnicGroupSerializer.Meta.fields + ['description']
+
+
+class TagsSerializer(serializers.ModelSerializer):
+    """Serializer for tags"""
+
+    class Meta:
+        model = Tag
+        fields = ['id', 'name']
+        read_only_fields = ['id']

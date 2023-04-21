@@ -1,11 +1,11 @@
 """
 View for the ethnic group
 """
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from ethnic_group import serializers
-from core.models import EthnicGroup
+from core.models import EthnicGroup, Tag
 
 
 class EthnicGroupViewSet(viewsets.ModelViewSet):
@@ -31,3 +31,18 @@ class EthnicGroupViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         """Create a new ethnic group."""
         serializer.save(user=self.request.user)
+
+
+class TagsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """View set for tags."""
+    serializer_class = serializers.TagsSerializer
+    queryset = Tag.objects.all().order_by('-name')
+    authentication_classes = [TokenAuthentication]
+    permissions_classes = [IsAuthenticated]
+
+
+    def get_queryset(self):
+        """Return tags for authenticated users."""
+        return self.queryset
+
+

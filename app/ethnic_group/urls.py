@@ -11,6 +11,7 @@ app_name = 'ethnic_group'
 router = DefaultRouter()
 router.register(r'ethnic_groups', views.EthnicGroupViewSet,
                 basename='ethnic_group')
+router.register('tags', views.TagsViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
