@@ -8,7 +8,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from core.helpers import coremodels
+from core.models import Tag
 from ethnic_group.serializers import TagsSerializer
 
 TAGS_URL = reverse('ethnic_group:tag-list')
@@ -45,12 +45,12 @@ class PrivateTagsApiTests(TestCase):
     def test_retrieve_tags(self):
         """Retrieve tags"""
 
-        coremodels.Tag.objects.create(name="test tag 1", user=self.user)
-        coremodels.Tag.objects.create(name="test tag 2", user=self.user)
+        Tag.objects.create(name="test tag 1", user=self.user)
+        Tag.objects.create(name="test tag 2", user=self.user)
 
         res = self.client.get(TAGS_URL)
 
-        tags = coremodels.Tag.objects.all().order_by("-name")
+        tags = Tag.objects.all().order_by("-name")
         serializer = TagsSerializer(tags, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
@@ -58,7 +58,7 @@ class PrivateTagsApiTests(TestCase):
     def test_update_tags(self):
         """Test updating tags"""
 
-        tag = coremodels.Tag.objects.create(name="test tag 1", user=self.user)
+        tag = Tag.objects.create(name="test tag 1", user=self.user)
         url = detail_url(tag.id)
 
         payload = {'name': 'tag update'}
@@ -72,12 +72,12 @@ class PrivateTagsApiTests(TestCase):
     def test_delete_tag(self):
         """Test deleting tag"""
 
-        tag = coremodels.Tag.objects.create(name='test tag 1', user=self.user)
+        tag = Tag.objects.create(name='test tag 1', user=self.user)
 
         url = detail_url(tag.id)
 
         res = self.client.delete(url)
 
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
-        tags = coremodels.Tag.objects.filter(user=self.user)
+        tags = Tag.objects.filter(user=self.user)
         self.assertFalse(tags.exists())
