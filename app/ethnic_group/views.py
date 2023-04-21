@@ -33,16 +33,17 @@ class EthnicGroupViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
-class TagsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+class TagsViewSet(mixins.DestroyModelMixin,
+                  mixins.UpdateModelMixin,
+                  mixins.ListModelMixin,
+                  viewsets.GenericViewSet):
     """View set for tags."""
+
     serializer_class = serializers.TagsSerializer
-    queryset = Tag.objects.all().order_by('-name')
+    queryset = Tag.objects.all()
     authentication_classes = [TokenAuthentication]
     permissions_classes = [IsAuthenticated]
 
-
     def get_queryset(self):
         """Return tags for authenticated users."""
-        return self.queryset
-
-
+        return self.queryset.order_by('-name')
