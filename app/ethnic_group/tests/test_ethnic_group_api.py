@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from django.contrib.auth import get_user_model
-from core.models import EthnicGroup
+from core.models import EthnicGroup, Tag
 
 from ethnic_group.serializers import (
     EthnicGroupSerializer,
@@ -122,3 +122,58 @@ class PrivateEthnicGroupTests(TestCase):
         serializer = EthnicGroupDetailSerializer(ethnic_group)
 
         self.assertEqual(res.data, serializer.data)
+
+    def test_create_ethnic_group_with_new_tags(self):
+        """Test creating ethnic group with new tags"""
+
+        payload = {
+            'name': 'Bakalanga',
+            'description': 'The Kalanga are a Bantu-speaking ethnic group.',
+            'language': 'Kalanga',
+            'population': 100,
+            'geography': 'South Africa, Botswana, Zimbabwe',
+            'history': 'A brief history of the Bakalanga ethnic group.',
+            'tags': [{'name': 'tag1'}, {'name': 'tag2'}],
+        }
+
+        res = self.client.post(ETHNIC_GROUP_URL, payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+
+        ethnic_group = EthnicGroup.objects.all()
+
+        self.assertEqual(ethnic_group.count(), 1)
+        self.assertEqual(ethnic_group[0].tags.count(), 2)
+
+        for tag in payload['tags']:
+            exist = ethnic_group[0].tags.filter(
+                name=tag['name']).exists()
+            self.assertTrue(exist)
+
+    def test_create_ethinic_group_with_existing_tags(self):
+        """Test creating a new ethinic group with existing tags"""
+        tag1 = Tag.objects.create(name='tag1 test', user=self.user)
+
+        payload = {
+            'name': 'Bakalanga',
+            'description': 'The Kalanga are a Bantu-speaking ethnic group.',
+            'language': 'Kalanga',
+            'population': 100,
+            'geography': 'South Africa, Botswana, Zimbabwe',
+            'history': 'A brief history of the Bakalanga ethnic group.',
+            'tags': [{'name': 'tag1 test'}, {'name': 'tag2'}],
+        }
+
+        res = self.client.post(ETHNIC_GROUP_URL, payload, format='json')
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+
+        ethnic_group = EthnicGroup.objects.all()
+
+        self.assertEqual(ethnic_group.count(), 1)
+        self.assertEqual(ethnic_group[0].tags.count(), 2)
+        self.assertIn(tag1, ethnic_group[0].tags.all())
+
+        for tag in payload['tags']:
+            exist = ethnic_group[0].tags.filter(
+                name=tag['name']).exists()
+            self.assertTrue(exist)
