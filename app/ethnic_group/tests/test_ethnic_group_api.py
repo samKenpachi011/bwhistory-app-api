@@ -177,3 +177,34 @@ class PrivateEthnicGroupTests(TestCase):
             exist = ethnic_group[0].tags.filter(
                 name=tag['name']).exists()
             self.assertTrue(exist)
+
+    def test_create_tag_on_group_update(self):
+        """Test creating a new tag on group update"""
+
+        ethnic_group_1 = create_ethnic_group(user=self.user)
+        url = detail_url(ethnic_group_1.id)
+
+        payload = {'tags': [{'name': 'tag3'}]}
+
+        res = self.client.patch(url, payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        ethnic_group = EthnicGroup.objects.all()
+        new_tag = Tag.objects.get(user=self.user, name='tag3')
+        self.assertIn(new_tag, ethnic_group[0].tags.all())
+
+    def test_clear_tag(self):
+        """Test clearing a tag"""
+
+        tag = Tag.objects.create(user=self.user, name='tag test')
+        ethnic_group = create_ethnic_group(user=self.user)
+
+        ethnic_group.tags.add(tag)
+
+        payload = {'tags': []}
+
+        url = detail_url(ethnic_group.id)
+        res = self.client.patch(url, payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertNotIn(tag, ethnic_group.tags.all())

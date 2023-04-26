@@ -24,10 +24,8 @@ class EthnicGroupSerializer(serializers.ModelSerializer):
                   'tags']
         read_only_fields = ['id']
 
-    def create(self, validated_data):
-        """Create ethnic group override"""
-        tags = validated_data.pop('tags', [])
-        ethinic_group = EthnicGroup.objects.create(**validated_data)
+    def _get_or_create(self, tags, ethnic_group):
+        """Get or create a new tag."""
         auth_user = self.context['request'].user
 
         for tag in tags:
@@ -35,9 +33,31 @@ class EthnicGroupSerializer(serializers.ModelSerializer):
                 user=auth_user,
                 **tag,)
 
-            ethinic_group.tags.add(tag_object)
+            ethnic_group.tags.add(tag_object)
 
-        return ethinic_group
+        return ethnic_group
+
+    def create(self, validated_data):
+        """Create ethnic group override"""
+        tags = validated_data.pop('tags', [])
+        ethnic_group = EthnicGroup.objects.create(**validated_data)
+        self._get_or_create(tags, ethnic_group)
+
+        return ethnic_group
+
+    def update(self, instance, validated_data):
+        """Update ethnic group override"""
+        tags = validated_data.pop('tags', None)
+
+        if tags is not None:
+            instance.tags.clear()
+            self._get_or_create(tags, instance)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+        return instance
 
 
 class EthnicGroupDetailSerializer(EthnicGroupSerializer):
