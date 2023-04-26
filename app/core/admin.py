@@ -45,3 +45,4 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.register(models.EthnicGroup)
+admin.site.register(models.Tag)

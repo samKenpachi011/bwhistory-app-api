@@ -2,8 +2,10 @@
 Tests for models
 """
 from django.test import TestCase
-from django.contrib.auth import get_user_model
 from core import models
+from core.helpers import (
+    get_user_model,
+    create_user)
 
 
 class ModelTests(TestCase):
@@ -79,3 +81,12 @@ class ModelTests(TestCase):
             history=history
         )
         self.assertEqual(str(ethnic_group), ethnic_group.name)
+
+    def test_create_tag_success(self):
+        """Test creating a tag success"""
+        user = create_user(
+            email='test@example.com',
+            password='testpassword123')
+        tag = models.Tag.objects.create(user=user, name='testtag')
+
+        self.assertEqual(str(tag), tag.name)
