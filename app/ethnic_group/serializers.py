@@ -64,4 +64,13 @@ class EthnicGroupDetailSerializer(EthnicGroupSerializer):
     """Serializer for ethnic group detail view."""
 
     class Meta(EthnicGroupSerializer.Meta):
-        fields = EthnicGroupSerializer.Meta.fields + ['description']
+        fields = EthnicGroupSerializer.Meta.fields + ['description', 'image']
+
+
+class EthnicGroupImageSerializer(serializers.ModelSerializer):
+    """Serializer for uploading images to ethnic group."""
+    class Meta:
+        model = EthnicGroup
+        fields = ['id', 'image']
+        read_only_fields = ['id']
+        extra_kwargs = {'image': {'required': True}}

@@ -43,8 +43,14 @@
 | Syntax | Description |
 | ----------- | ----------- |
 | `docker-compose run --rm app sh -c "python manage.py startapp user"`| Create a user app |
+<br/>
 
-
+**EthnicGroup App image api**
+| Syntax | Description |
+| ----------- | ----------- |
+| Pillow | Contains all the basic image processing functionality |
+| zlib , zlib-dev | used for data compression |
+<br/>
 
 **User App**
     - Used for creating auth tokens, user registration, updating and viewing profiles
@@ -206,6 +212,7 @@
 **Why environment variable**
 - Easily passed to docker to be used in both local development and production
 
+
 7. ### Linting
     - [Flake8 Guide](https://flake8.pycqa.org/en/latest/)
     - [Flake8 Configuration](https://flake8.pycqa.org/en/latest/user/configuration.html)
@@ -246,7 +253,7 @@
 - Create the neccessary docker and docker-compose files.
 - Add requirements files and create the app directory.
 - run `docker build .` to build the docker image.
-- run `docker-compose build` to use docker compose to build and tag the image.
+- run `docker-compose build` to use docker compose to build and tag the image or after updating the requirements.txt.
 - Add flake 8 to requirements.dev.txt and create the .flake8 to ignore application files inside app/ from linting.
 - Add args to the docker-compose file and update the docker file to install dev requirements when in development.
 - Add a database service with environment variables set to the docker-compose file
@@ -254,8 +261,13 @@
 - To fix database race issues create a core app and add a management command to check if the database is ready
 - Add a custom authentication user model and include the admin configs (list, add)
 - Add a user app for creating users, tokens and managing profiles
-- Add a ethinic group app for creating,updating and viewing ethinic groups.
+- Add a ethnic group app for creating,updating and viewing ethinic groups.
+- Add a tag feature for tagging ethnic groups
+- Add a image api for ethnic groups
 
 ## Contributions
 - After cloning the repo change to the dev branch and create pull requests from there.
 -- git branch -M dev
+- Check the available issues -> pick an issue to manage.
+- Write tests for the feature or bug fix.
+- Submit a pull request.

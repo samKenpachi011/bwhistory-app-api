@@ -2,6 +2,7 @@
 Tests for models
 """
 from django.test import TestCase
+from unittest.mock import patch
 from core import models
 from core.helpers import (
     get_user_model,
@@ -90,3 +91,16 @@ class ModelTests(TestCase):
         tag = models.Tag.objects.create(user=user, name='testtag')
 
         self.assertEqual(str(tag), tag.name)
+
+    @patch('core.models.uuid.uuid4')
+    def test_creating_image_path(self, mock_uuid):
+        """Test creating image path using mock uuid"""
+
+        # random string
+        uuid = 'test-uuid'
+        mock_uuid.return_value = uuid
+
+        # set the file path
+        file_path = models.ethnic_group_image_path(None, 'example.jpg')
+
+        self.assertEqual(file_path, f'uploads/ethnic_group/{uuid}.jpg')
