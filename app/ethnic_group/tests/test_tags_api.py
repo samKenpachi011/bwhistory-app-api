@@ -8,7 +8,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from core.models import Tag
+from core.models import Tag, EthnicGroup
 from ethnic_group.serializers import TagsSerializer
 
 TAGS_URL = reverse('ethnic_group:tag-list')
@@ -81,3 +81,59 @@ class PrivateTagsApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
         tags = Tag.objects.filter(user=self.user)
         self.assertFalse(tags.exists())
+
+    def test_filter_tags_assigned_to_groups(self):
+        """Test filtering tags assigned to groups"""
+
+        tag1 = Tag.objects.create(user=self.user, name='tag1')
+        tag2 = Tag.objects.create(user=self.user, name='tag2')
+
+        ethnic_group = EthnicGroup.objects.create(
+            user=self.user,
+            name='Bakalanga',
+            description='The Kalanga are a Bantu-speaking ethnic group.',
+            language='Kalanga',
+            population=100,
+            geography='South Africa, Botswana, Zimbabwe',
+            history='A brief history of the Bakalanga ethnic group.',
+        )
+
+        ethnic_group.tags.add(tag1)
+
+        res = self.client.get(TAGS_URL, {'assigned_only': 1})
+
+        s1 = TagsSerializer(tag1)
+        s2 = TagsSerializer(tag2)
+        self.assertIn(s1.data, res.data)
+        self.assertNotIn(s2.data, res.data)
+
+    def test_filtered_tags_unique_(self):
+        """Test that filtered tags are not duplicate"""
+        tag1 = Tag.objects.create(user=self.user, name='tag1')
+        Tag.objects.create(user=self.user, name='tag2')
+
+        ethnic_group1 = EthnicGroup.objects.create(
+            user=self.user,
+            name='Group 1',
+            description='Test',
+            language='Test',
+            population=100,
+            geography='South Africa, Botswana, Zimbabwe',
+            history='A brief history of the test ethnic group.',
+        )
+        ethnic_group2 = EthnicGroup.objects.create(
+            user=self.user,
+            name='Group 2',
+            description='Test',
+            language='Test',
+            population=100,
+            geography='South Africa, Botswana, Zimbabwe',
+            history='A brief history of the test ethnic group.',
+        )
+
+        ethnic_group1.tags.add(tag1)
+        ethnic_group2.tags.add(tag1)
+
+        res = self.client.get(TAGS_URL, {'assigned_only': 1})
+
+        self.assertEqual(len(res.data), 1)
