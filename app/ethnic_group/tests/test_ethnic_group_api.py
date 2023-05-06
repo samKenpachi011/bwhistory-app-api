@@ -218,6 +218,29 @@ class PrivateEthnicGroupTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertNotIn(tag, ethnic_group.tags.all())
 
+    def test_filter_by_tag(self):
+        """Test filtering groups by tag"""
+        group1 = create_ethnic_group(user=self.user, name='Group 1')
+        group2 = create_ethnic_group(user=self.user, name='Group 2')
+
+        tag1 = Tag.objects.create(user=self.user, name='tag1')
+        tag2 = Tag.objects.create(user=self.user, name='tag2')
+        group1.tags.add(tag1)
+        group2.tags.add(tag2)
+        group3 = create_ethnic_group(user=self.user, name='Group 3')
+
+        params = {'tags': f'{tag1.id}, {tag2.id}'}
+
+        res = self.client.get(ETHNIC_GROUP_URL, params)
+
+        s1 = EthnicGroupSerializer(group1)
+        s2 = EthnicGroupSerializer(group2)
+        s3 = EthnicGroupSerializer(group3)
+
+        self.assertIn(s1.data, res.data)
+        self.assertIn(s2.data, res.data)
+        self.assertNotIn(s3.data, res.data)
+
 
 class ImageUploadTests(TestCase):
     """Tests for authenticated users"""
