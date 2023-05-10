@@ -104,3 +104,33 @@ class ModelTests(TestCase):
         file_path = models.ethnic_group_image_path(None, 'example.jpg')
 
         self.assertEqual(file_path, f'uploads/ethnic_group/{uuid}.jpg')
+
+# Culture model tests
+    def test_creating_culture_success(self):
+        """Test creating culture success"""
+
+        # define the user
+        user = get_user_model().objects.create_user(
+            email='test@example.com',
+            password='testpass123'
+        )
+
+        # define the culture
+        ethnic_group = models.EthnicGroup.objects.create(
+            user=user,
+            name='Tswana',
+            description='The Tswana are a Bantu-speaking ethnic group',
+            language='Setswana',
+            population=10*100,
+            geography='Botswana',
+            history='A brief history of the Tswana ethnic group.'
+        )
+
+        culture = models.Culture.objects.create(
+            user=user,
+            ethnic_group=ethnic_group,
+            name='Test Culture',
+            description='Test culture'
+        )
+
+        self.assertEqual(str(culture), culture.name)
