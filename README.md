@@ -38,7 +38,15 @@
 - app/ethnicgroup/apps
 - app/ethnicgroup/views
 
+### **Culture App**
+- Used for creating, updating and viewing cultures.
 
+**Culture App structure**
+- app/culture/tests/
+- app/culture/urls
+- app/culture/serializers
+- app/culture/apps
+- app/culture/views
 
 | Syntax | Description |
 | ----------- | ----------- |
@@ -264,6 +272,8 @@
 - Add a ethnic group app for creating,updating and viewing ethinic groups.
 - Add a tag feature for tagging ethnic groups
 - Add a image api for ethnic groups
+- Add a filtering feature for ethinic groups
+- Add a culture app for creating, updating and viewing different cultures
 
 ## Contributions
 - After cloning the repo change to the dev branch and create pull requests from there.
