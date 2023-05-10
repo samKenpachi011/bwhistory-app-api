@@ -13,3 +13,9 @@ class CultureSerializer(serializers.ModelSerializer):
         model = Culture
         fields = ['id', 'name', 'description']
         read_only_fields = ['id']
+
+    def create(self, validated_data):
+        """Create a new Culture override"""
+        culture = Culture.objects.create(**validated_data)
+
+        return culture

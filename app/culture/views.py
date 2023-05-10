@@ -16,4 +16,14 @@ class CultureViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        """Retrieve culture objects for authenticated users"""
         return self.queryset.order_by('-id')
+
+    def get_serializer_class(self):
+        """Return a serializer class for the request"""
+
+        return self.serializer_class
+
+    def perform_create(self, serializer):
+        """Create a new culture"""
+        serializer.save(user=self.request.user)

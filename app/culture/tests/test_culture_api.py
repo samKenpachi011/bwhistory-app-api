@@ -61,6 +61,20 @@ class PrivateCultureTests(TestCase):
             email='testuser@example.com',
             password='testpassword')
 
+        defaults = {
+            'name': 'Test Tswana',
+            'description': 'The Tswana are a Bantu-speaking ethnic group',
+            'language': 'Setswana',
+            'population': 100,
+            'geography': 'Botswana',
+            'history': 'A brief history of the Tswana ethnic group.'
+        }
+
+        self.ethnic_group = EthnicGroup.objects.create(
+            user=self.user,
+            **defaults
+        )
+
         self.client.force_authenticate(self.user)
 
     def test_retrieve_culture(self):
@@ -77,3 +91,21 @@ class PrivateCultureTests(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
+
+    def test_create_culture(self):
+        """Test for creating culture information"""
+        payload = {
+            'name': 'Test Culture',
+            'description': 'Test description',
+        }
+        res = self.client.post(CULTURE_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+
+        # compare attributes with payload data
+        culture = Culture.objects.get(id=res.data['id'])
+
+        for k, v in payload.items():
+            self.assertEqual(getattr(culture, k), v)
+
+        self.assertEqual(self.user, culture.user)
