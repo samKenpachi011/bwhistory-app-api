@@ -67,3 +67,23 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+
+# Culture model
+class Culture(models.Model):
+    """Class representing cultures"""
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        on_delete=models.SET_NULL
+    )
+    ethnic_group = models.ForeignKey(
+        EthnicGroup,
+        on_delete=models.CASCADE,
+        null=True, blank=True
+    )
+
+    def __str__(self):
+        return self.name
