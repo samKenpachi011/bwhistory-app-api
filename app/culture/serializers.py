@@ -18,6 +18,8 @@ class CultureSerializer(serializers.ModelSerializer):
         culture = Culture.objects.create(**validated_data)
 
         return culture
+
+
 class CultureDetailsSerializer(CultureSerializer):
     """Serializer for culture details view"""
 

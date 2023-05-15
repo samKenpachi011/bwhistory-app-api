@@ -43,6 +43,7 @@ def details_url(culture_id):
     """Returns the details url"""
     return reverse('culture:culture-detail', args=[culture_id])
 
+
 class PublicCultureTests(TestCase):
     """Tests for unauthenticated users."""
     def setUp(self):
@@ -172,12 +173,12 @@ class PrivateCultureTests(TestCase):
         }
 
         url = details_url(culture.id)
-        res = self.client.patch(url, payload)
+        self.client.patch(url, payload)
 
         culture.refresh_from_db()
 
         self.assertEqual(culture.user, self.user)
-        for k,v in payload.items():
+        for k, v in payload.items():
 
             if k == 'ethnic_group':
                 self.assertEqual(getattr(culture, k).id, v)
@@ -186,7 +187,6 @@ class PrivateCultureTests(TestCase):
 
     def test_detele_culture(self):
         """Test delete culture"""
-
         culture = create_culture(user=self.user)
         url = details_url(culture.id)
 

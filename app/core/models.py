@@ -43,9 +43,9 @@ class EthnicGroup(models.Model):
     )
     name = models.CharField(max_length=100)
     description = models.TextField()
-    language = models.CharField(max_length=100,blank=True)
+    language = models.CharField(max_length=100, blank=True)
     population = models.PositiveIntegerField()
-    geography = models.CharField(max_length=200,blank=True)
+    geography = models.CharField(max_length=200, blank=True)
     history = models.TextField(blank=True)
     tags = models.ManyToManyField('Tag')
     image = models.ImageField(null=True, upload_to=ethnic_group_image_path)
@@ -80,7 +80,7 @@ class Culture(models.Model):
         on_delete=models.SET_NULL
     )
     ethnic_group = models.ForeignKey(
-        EthnicGroup,related_name="ethnic_group",
+        EthnicGroup, related_name="ethnic_group",
         on_delete=models.CASCADE,
         null=True, blank=True
     )
