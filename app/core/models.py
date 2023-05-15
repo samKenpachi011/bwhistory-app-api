@@ -80,7 +80,7 @@ class Culture(models.Model):
         on_delete=models.SET_NULL
     )
     ethnic_group = models.ForeignKey(
-        EthnicGroup,
+        EthnicGroup,related_name="ethnic_group",
         on_delete=models.CASCADE,
         null=True, blank=True
     )

@@ -98,14 +98,38 @@ class PrivateCultureTests(TestCase):
             'name': 'Test Culture',
             'description': 'Test description',
         }
-        res = self.client.post(CULTURE_URL, payload)
+        res = self.client.post(CULTURE_URL, payload, format='json')
+
+        serializer = CultureSerializer(data=payload)
+        self.assertTrue(serializer.is_valid())
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
-        # compare attributes with payload data
         culture = Culture.objects.get(id=res.data['id'])
-
         for k, v in payload.items():
             self.assertEqual(getattr(culture, k), v)
+
+        self.assertEqual(self.user, culture.user)
+
+    def test_create_culture_with_ethnic_group(self):
+        """Test for creating culture with ethnic group."""
+        payload = {
+            'name': 'Test Culture',
+            'description': 'Test description',
+            'ethnic_group': self.ethnic_group.id
+        }
+        res = self.client.post(CULTURE_URL, payload, format='json')
+
+        serializer = CultureSerializer(data=payload)
+        self.assertTrue(serializer.is_valid())
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+
+        culture = Culture.objects.get(id=res.data['id'])
+        for k, v in payload.items():
+            if k == 'ethnic_group':
+                self.assertEqual(getattr(culture, k).id, v)
+            else:
+                self.assertEqual(getattr(culture, k), v)
 
         self.assertEqual(self.user, culture.user)
