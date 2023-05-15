@@ -10,7 +10,7 @@ from core.models import Culture
 
 class CultureViewSet(viewsets.ModelViewSet):
     """View for managing cultures"""
-    serializer_class = serializers.CultureSerializer
+    serializer_class = serializers.CultureDetailsSerializer
     queryset = Culture.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -21,6 +21,8 @@ class CultureViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         """Return a serializer class for the request"""
+        if self.action == 'list':
+            return serializers.CultureSerializer
 
         return self.serializer_class
 

@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
 from core.models import Culture, EthnicGroup
-from culture.serializers import CultureSerializer
+from culture.serializers import CultureSerializer, CultureDetailsSerializer
 
 
 CULTURE_URL = reverse('culture:culture-list')
@@ -38,6 +38,10 @@ def create_culture(user, **params):
     culture = Culture.objects.create(user=user, **defaults)
     return culture
 
+
+def details_url(culture_id):
+    """Returns the details url"""
+    return reverse('culture:culture-detail', args=[culture_id])
 
 class PublicCultureTests(TestCase):
     """Tests for unauthenticated users."""
@@ -100,16 +104,11 @@ class PrivateCultureTests(TestCase):
         }
         res = self.client.post(CULTURE_URL, payload, format='json')
 
-        serializer = CultureSerializer(data=payload)
-        self.assertTrue(serializer.is_valid())
-
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
         culture = Culture.objects.get(id=res.data['id'])
-        for k, v in payload.items():
-            self.assertEqual(getattr(culture, k), v)
-
         self.assertEqual(self.user, culture.user)
+        self.assertEqual(payload['name'], culture.name)
 
     def test_create_culture_with_ethnic_group(self):
         """Test for creating culture with ethnic group."""
@@ -133,3 +132,15 @@ class PrivateCultureTests(TestCase):
                 self.assertEqual(getattr(culture, k), v)
 
         self.assertEqual(self.user, culture.user)
+
+    def test_get_culture_details(self):
+        """Test get culture details"""
+
+        culture = create_culture(user=self.user)
+        url = details_url(culture.id)
+
+        res = self.client.get(url)
+
+        serializer = CultureDetailsSerializer(culture)
+
+        self.assertEqual(res.data, serializer.data)

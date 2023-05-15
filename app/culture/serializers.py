@@ -3,7 +3,7 @@ Serializer for Culture Api's
 """
 
 from rest_framework import serializers
-from core.models import Culture, EthnicGroup
+from core.models import Culture
 from ethnic_group.serializers import EthnicGroupSerializer
 
 
@@ -11,7 +11,7 @@ class CultureSerializer(serializers.ModelSerializer):
     """Serializer for the Culture model"""
     class Meta:
         model = Culture
-        fields = ['id', 'name', 'description', 'ethnic_group' ]
+        fields = ['id', 'name', 'ethnic_group']
         read_only_fields = ['id']
 
     def create(self, validated_data):
@@ -19,3 +19,8 @@ class CultureSerializer(serializers.ModelSerializer):
         culture = Culture.objects.create(**validated_data)
 
         return culture
+class CultureDetailsSerializer(CultureSerializer):
+    """Serializer for culture details view"""
+
+    class Meta(CultureSerializer.Meta):
+        fields = CultureSerializer.Meta.fields + ['description']
