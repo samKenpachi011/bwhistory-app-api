@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'core',
     'user',
     'ethnic_group',
+    'culture',
     'rest_framework',
     'rest_framework.authtoken',
     'drf_spectacular',
