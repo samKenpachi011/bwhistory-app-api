@@ -4,7 +4,6 @@ Serializer for Culture Api's
 
 from rest_framework import serializers
 from core.models import Culture
-from ethnic_group.serializers import EthnicGroupSerializer
 
 
 class CultureSerializer(serializers.ModelSerializer):

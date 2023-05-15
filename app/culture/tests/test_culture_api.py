@@ -144,3 +144,53 @@ class PrivateCultureTests(TestCase):
         serializer = CultureDetailsSerializer(culture)
 
         self.assertEqual(res.data, serializer.data)
+
+    def test_partial_update(self):
+        """Test partial culture update"""
+
+        culture = create_culture(user=self.user)
+
+        payload = {
+            'description': 'New description'
+        }
+
+        url = details_url(culture.id)
+        res = self.client.patch(url, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        culture.refresh_from_db()
+        self.assertEqual(culture.description, payload['description'])
+
+    def test_full_culture_update(self):
+        """Test full culture update"""
+
+        culture = create_culture(user=self.user)
+        payload = {
+            'name': 'Updated Culture',
+            'description': 'Update description',
+            'ethnic_group': self.ethnic_group.id
+        }
+
+        url = details_url(culture.id)
+        res = self.client.patch(url, payload)
+
+        culture.refresh_from_db()
+
+        self.assertEqual(culture.user, self.user)
+        for k,v in payload.items():
+
+            if k == 'ethnic_group':
+                self.assertEqual(getattr(culture, k).id, v)
+            else:
+                self.assertEqual(getattr(culture, k), v)
+
+    def test_detele_culture(self):
+        """Test delete culture"""
+
+        culture = create_culture(user=self.user)
+        url = details_url(culture.id)
+
+        res = self.client.delete(url)
+
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Culture.objects.filter(id=culture.id).exists())
