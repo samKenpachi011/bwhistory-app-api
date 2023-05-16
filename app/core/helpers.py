@@ -3,6 +3,7 @@ Helper functions
 """
 
 from django.contrib.auth import get_user_model
+from rest_framework.test import APIClient
 
 
 def create_user(email, password):
