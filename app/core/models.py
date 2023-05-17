@@ -84,6 +84,7 @@ class Culture(models.Model):
         on_delete=models.CASCADE,
         null=True, blank=True
     )
+    tags = models.ManyToManyField('Tag')
 
     def __str__(self):
         return self.name

@@ -13,9 +13,9 @@ from core.models import Tag, Culture
 
 TAGS_URL = reverse('culture:tag-list')
 
+
 class PrivateCultureTags(TestCase):
     """Private tags API tests for culture"""
-
     def setUp(self):
 
         self.client = APIClient()
@@ -29,8 +29,8 @@ class PrivateCultureTags(TestCase):
     def test_filter_tags_assigned_to_culture(self):
         """Test filter tags assigned to culture."""
 
-        tag = Tag.objects.create(user=self.user,name='tag 1')
-        tag2 = Tag.objects.create(user=self.user,name='tag 2')
+        tag = Tag.objects.create(user=self.user, name='tag 1')
+        tag2 = Tag.objects.create(user=self.user, name='tag 2')
 
         culture = create_culture(user=self.user)
         culture.tags.add(tag)
