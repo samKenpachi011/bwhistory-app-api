@@ -5,11 +5,10 @@ from core.helpers import create_user, APIClient
 
 from django.test import TestCase
 from django.urls import reverse
-from rest_framework import status
 from culture.tests.test_culture_api import create_culture
 from ethnic_group.serializers import TagsSerializer
 
-from core.models import Tag, Culture
+from core.models import Tag
 
 TAGS_URL = reverse('culture:tag-list')
 

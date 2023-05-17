@@ -6,7 +6,10 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
-from core.models import Culture, EthnicGroup
+from core.models import (
+    Culture,
+    EthnicGroup,
+    Tag)
 from culture.serializers import CultureSerializer, CultureDetailsSerializer
 
 
@@ -194,3 +197,46 @@ class PrivateCultureTests(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Culture.objects.filter(id=culture.id).exists())
+
+    def test_create_culture_new_tags(self):
+        """Test creating culture with new tags."""
+        payload = {
+            'name': 'Test Culture',
+            'description': 'Test description',
+            'tags': [{'name': 'tag1'}, {'name': 'tag2'}]
+        }
+        res = self.client.post(CULTURE_URL, payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+
+        culture = Culture.objects.get(id=res.data['id'])
+        self.assertEqual(self.user, culture.user)
+        self.assertEqual(culture.tags.count(), 2)
+
+        for tag in payload['tags']:
+            exist = culture.tags.filter(
+                name=tag['name']).exists()
+            self.assertTrue(exist)
+
+    def test_create_culture_with_exisiting_tags(self):
+        """Test creating a culture with existing tags"""
+        tag1 = Tag.objects.create(name='tag1 test', user=self.user)
+        payload = {
+            'name': 'Test Culture',
+            'description': 'Test description',
+            'tags': [{'name': 'tag1 test'}, {'name': 'tag2'}]
+        }
+
+        res = self.client.post(CULTURE_URL, payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+
+        culture = Culture.objects.get(id=res.data['id'])
+        self.assertEqual(culture.tags.count(), 2)
+        self.assertIn(tag1, culture.tags.all())
+
+        for tag in payload['tags']:
+            exist = culture.tags.filter(
+                name=tag['name']
+            ).exists()
+            self.assertTrue(exist)

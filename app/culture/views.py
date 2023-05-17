@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from culture import serializers
 from core.models import Culture, Tag
 from core.helpers import _params_to_ints
-from ethnic_group.views import BaseAttrViewSet, EthnicGroupViewSet
+from ethnic_group.views import BaseAttrViewSet
 from ethnic_group.serializers import TagsSerializer
 
 from drf_spectacular.utils import (
@@ -16,6 +16,7 @@ from drf_spectacular.utils import (
     OpenApiParameter,
     OpenApiTypes,
 )
+
 
 @extend_schema_view(
     list=extend_schema(
@@ -28,9 +29,6 @@ from drf_spectacular.utils import (
         ]
     )
 )
-
-
-
 class CultureViewSet(viewsets.ModelViewSet):
     """View for managing cultures"""
     serializer_class = serializers.CultureDetailsSerializer
@@ -68,7 +66,7 @@ class CultureViewSet(viewsets.ModelViewSet):
 
 
 @extend_schema_view(
-    list = extend_schema(
+    list=extend_schema(
         parameters=[
             OpenApiParameter(
                 'assigned_only',
@@ -78,7 +76,6 @@ class CultureViewSet(viewsets.ModelViewSet):
         ]
     )
 )
-
 class TagsViewSet(BaseAttrViewSet):
     """View set for tags"""
     serializer_class = TagsSerializer
