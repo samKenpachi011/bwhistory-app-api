@@ -6,7 +6,10 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
-from core.models import Culture, EthnicGroup
+from core.models import (
+    Culture,
+    EthnicGroup,
+    Tag)
 from culture.serializers import CultureSerializer, CultureDetailsSerializer
 
 
@@ -194,3 +197,103 @@ class PrivateCultureTests(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Culture.objects.filter(id=culture.id).exists())
+
+    def test_create_culture_new_tags(self):
+        """Test creating culture with new tags."""
+        payload = {
+            'name': 'Test Culture',
+            'description': 'Test description',
+            'tags': [{'name': 'tag1'}, {'name': 'tag2'}]
+        }
+        res = self.client.post(CULTURE_URL, payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+
+        culture = Culture.objects.get(id=res.data['id'])
+        self.assertEqual(self.user, culture.user)
+        self.assertEqual(culture.tags.count(), 2)
+
+        for tag in payload['tags']:
+            exist = culture.tags.filter(
+                name=tag['name']).exists()
+            self.assertTrue(exist)
+
+    def test_create_culture_with_exisiting_tags(self):
+        """Test creating a culture with existing tags"""
+        tag1 = Tag.objects.create(name='tag1 test', user=self.user)
+        payload = {
+            'name': 'Test Culture',
+            'description': 'Test description',
+            'tags': [{'name': 'tag1 test'}, {'name': 'tag2'}]
+        }
+
+        res = self.client.post(CULTURE_URL, payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+
+        culture = Culture.objects.get(id=res.data['id'])
+        self.assertEqual(culture.tags.count(), 2)
+        self.assertIn(tag1, culture.tags.all())
+
+        for tag in payload['tags']:
+            exist = culture.tags.filter(
+                name=tag['name']
+            ).exists()
+            self.assertTrue(exist)
+
+    def test_create_tag_on_culture_update(self):
+        """Test creating a new tag on a culture update"""
+
+        culture = create_culture(user=self.user)
+
+        url = details_url(culture.id)
+
+        payload = {'tags': [{'name': 'tag3'}]}
+
+        res = self.client.patch(url, payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        new_tag = Tag.objects.get(name='tag3')
+        culture = Culture.objects.get(id=culture.id)
+        self.assertIn(new_tag, culture.tags.all())
+
+    def test_clear_culture_tags(self):
+        """Test clearing culture tags"""
+        tag = Tag.objects.create(name='tag1 test', user=self.user)
+
+        culture = create_culture(user=self.user)
+
+        url = details_url(culture.id)
+
+        payload = {'tags': []}
+
+        res = self.client.patch(url, payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertNotIn(tag, culture.tags.all())
+
+    def test_filter_culture_tags9(self):
+        """Test filter culture by tags"""
+        culture1 = create_culture(user=self.user, name='Culture 1')
+        culture2 = create_culture(user=self.user, name='Culture 2')
+
+        tag1 = Tag.objects.create(user=self.user, name='tag1')
+        tag2 = Tag.objects.create(user=self.user, name='tag2')
+
+        culture1.tags.add(tag1)
+        culture2.tags.add(tag2)
+
+        culture3 = create_culture(user=self.user, name='Culture 3')
+
+        params = {'tags': f'{tag1.id}, {tag2.id}'}
+
+        res = self.client.get(CULTURE_URL, params)
+
+        s1 = CultureSerializer(culture1)
+        s2 = CultureSerializer(culture2)
+        s3 = CultureSerializer(culture3)
+
+        self.assertIn(s1.data, res.data)
+        self.assertIn(s2.data, res.data)
+        self.assertNotIn(s3.data, res.data)

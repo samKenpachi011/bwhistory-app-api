@@ -10,6 +10,7 @@ app_name = 'culture'
 router = DefaultRouter()
 router.register('culture', views.CultureViewSet,
                 basename='culture')
+router.register('tags', views.TagsViewSet,)
 
 urlpatterns = [
     path('', include(router.urls))
