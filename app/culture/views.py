@@ -36,9 +36,6 @@ class CultureViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def _params_to_int(self, qs):
-        pass
-
     def get_queryset(self):
         """Retrieve culture objects for authenticated users"""
 
