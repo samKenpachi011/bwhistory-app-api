@@ -29,6 +29,21 @@ class CultureSerializer(serializers.ModelSerializer):
 
         return culture
 
+    def update(self, instance, validated_data):
+        """Update culture override"""
+        tags = validated_data.pop('tags', None)
+        auth_user = self.context['request'].user
+
+        if tags is not None:
+            instance.tags.clear()
+            _get_or_create(auth_user, tags, instance)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+        return instance
+
 
 class CultureDetailsSerializer(CultureSerializer):
     """Serializer for culture details view"""

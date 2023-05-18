@@ -4,6 +4,7 @@ Helper functions
 
 from django.contrib.auth import get_user_model
 from core.models import Tag
+from rest_framework.test import APIClient # noqa
 
 
 def create_user(email, password):

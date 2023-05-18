@@ -240,3 +240,60 @@ class PrivateCultureTests(TestCase):
                 name=tag['name']
             ).exists()
             self.assertTrue(exist)
+
+    def test_create_tag_on_culture_update(self):
+        """Test creating a new tag on a culture update"""
+
+        culture = create_culture(user=self.user)
+
+        url = details_url(culture.id)
+
+        payload = {'tags': [{'name': 'tag3'}]}
+
+        res = self.client.patch(url, payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        new_tag = Tag.objects.get(name='tag3')
+        culture = Culture.objects.get(id=culture.id)
+        self.assertIn(new_tag, culture.tags.all())
+
+    def test_clear_culture_tags(self):
+        """Test clearing culture tags"""
+        tag = Tag.objects.create(name='tag1 test', user=self.user)
+
+        culture = create_culture(user=self.user)
+
+        url = details_url(culture.id)
+
+        payload = {'tags': []}
+
+        res = self.client.patch(url, payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertNotIn(tag, culture.tags.all())
+
+    def test_filter_culture_tags9(self):
+        """Test filter culture by tags"""
+        culture1 = create_culture(user=self.user, name='Culture 1')
+        culture2 = create_culture(user=self.user, name='Culture 2')
+
+        tag1 = Tag.objects.create(user=self.user, name='tag1')
+        tag2 = Tag.objects.create(user=self.user, name='tag2')
+
+        culture1.tags.add(tag1)
+        culture2.tags.add(tag2)
+
+        culture3 = create_culture(user=self.user, name='Culture 3')
+
+        params = {'tags': f'{tag1.id}, {tag2.id}'}
+
+        res = self.client.get(CULTURE_URL, params)
+
+        s1 = CultureSerializer(culture1)
+        s2 = CultureSerializer(culture2)
+        s3 = CultureSerializer(culture3)
+
+        self.assertIn(s1.data, res.data)
+        self.assertIn(s2.data, res.data)
+        self.assertNotIn(s3.data, res.data)
