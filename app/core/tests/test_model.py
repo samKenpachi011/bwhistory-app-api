@@ -144,6 +144,6 @@ class ModelTests(TestCase):
         uuid = 'test-uuid'
         mock_uuid.return_value = uuid
 
-        file_path = image_path('ethnic_group', 'example.jpg')
+        file_path = image_path('culture', 'example.jpg')
 
         self.assertEqual(file_path, f'uploads/culture/{uuid}.jpg')
