@@ -2,8 +2,10 @@
 Helper functions
 """
 
+import uuid
+import os
 from django.contrib.auth import get_user_model
-from core.models import Tag
+from core import models
 from rest_framework.test import APIClient # noqa
 
 
@@ -20,9 +22,26 @@ def _params_to_ints(qs):
 def _get_or_create(user, tags, instance):
     """Get or create a new tag."""
     for tag in tags:
-        tag_object, created = Tag.objects.get_or_create(
+        tag_object, created = models.Tag.objects.get_or_create(
             user=user,
             **tag
         )
         instance.tags.add(tag_object)
     return instance
+
+
+# generate file path for images
+def image_path(instance, filename):
+    """Generate a path for instance images"""
+    class_name = ''
+    ext = os.path.splitext(filename)[1]
+    filename = f'{uuid.uuid4()}{ext}'
+
+    if type(instance) == models.EthnicGroup:
+        class_name = 'ethnic_group'
+    elif type(instance) == models.Culture:
+        class_name = 'culture'
+    else:
+        class_name = 'test'
+
+    return os.path.join('uploads', class_name, filename)

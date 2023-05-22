@@ -49,4 +49,14 @@ class CultureDetailsSerializer(CultureSerializer):
     """Serializer for culture details view"""
 
     class Meta(CultureSerializer.Meta):
-        fields = CultureSerializer.Meta.fields + ['description']
+        fields = CultureSerializer.Meta.fields + ['description', 'image']
+
+
+class CultureImageSerializer(serializers.ModelSerializer):
+    """Serializer for culture image view"""
+
+    class Meta:
+        model = Culture
+        fields = ['id', 'image']
+        read_only_fields = ['id']
+        extra_kwargs = {'image': {'required': True}}
