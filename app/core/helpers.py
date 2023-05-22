@@ -33,8 +33,7 @@ def _get_or_create(user, tags, instance):
 # generate file path for images
 def image_path(instance, filename):
     """Generate a path for instance images"""
-    class_name = 'test'
-
+    class_name = ''
     ext = os.path.splitext(filename)[1]
     filename = f'{uuid.uuid4()}{ext}'
 
@@ -42,5 +41,7 @@ def image_path(instance, filename):
         class_name = 'ethnic_group'
     elif type(instance) == models.Culture:
         class_name = 'culture'
-    breakpoint()
+    else:
+        class_name = 'test'
+
     return os.path.join('uploads', class_name, filename)

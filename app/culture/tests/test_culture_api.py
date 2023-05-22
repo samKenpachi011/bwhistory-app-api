@@ -3,6 +3,9 @@ Test culture api's
 """
 from django.test import TestCase
 from django.urls import reverse
+import tempfile
+import os
+from PIL import Image
 from rest_framework import status
 from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
@@ -12,6 +15,7 @@ from core.models import (
     Tag)
 from culture.serializers import CultureSerializer, CultureDetailsSerializer
 from core.helpers import create_user
+
 
 CULTURE_URL = reverse('culture:culture-list')
 
@@ -317,12 +321,30 @@ class CultureImageUploadTests(TestCase):
         self.client.force_authenticate(self.user)
         self.culture = create_culture(user=self.user)
 
-    # def test_upload_image_fail(self):
-    #     """Test upload image fail."""
-    #     url = image_upload_url(self.culture.id)
+    def test_image_upload(self):
+        """Test upload culture image"""
+        url = image_upload_url(self.culture.id)
 
-    #     payload = {'image': 'nothing'}
+        with tempfile.NamedTemporaryFile(suffix='.jpg') as image_file:
+            img = Image.new('RGB', (10, 10))
+            img.save(image_file, format='JPEG')
+            image_file.seek(0)
 
-    #     res = self.client.post(url, payload, format='multipart')
+            payload = {'image': image_file}
 
-    #     self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+            res = self.client.post(url, payload, format='multipart')
+
+        self.culture.refresh_from_db()
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertIn('image', res.data)
+        self.assertTrue(os.path.exists(self.culture.image.path))
+
+    def test_upload_image_fail(self):
+        """Test upload image fail."""
+        url = image_upload_url(self.culture.id)
+
+        payload = {'image': 'nothing'}
+
+        res = self.client.post(url, payload, format='multipart')
+
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
