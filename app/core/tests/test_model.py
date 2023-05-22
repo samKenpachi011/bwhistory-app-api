@@ -6,7 +6,8 @@ from unittest.mock import patch
 from core import models
 from core.helpers import (
     get_user_model,
-    create_user)
+    create_user,
+    image_path)
 
 
 class ModelTests(TestCase):
@@ -134,3 +135,15 @@ class ModelTests(TestCase):
         )
 
         self.assertEqual(str(culture), culture.name)
+
+# Generic image path test
+    @patch('core.models.uuid.uuid4')
+    def test_image_path(self, mock_uuid):
+        """Test creating an image path for instances"""
+
+        uuid = 'test-uuid'
+        mock_uuid.return_value = uuid
+
+        file_path = image_path('ethnic_group', 'example.jpg')
+
+        self.assertEqual(file_path, f'uploads/culture/{uuid}.jpg')

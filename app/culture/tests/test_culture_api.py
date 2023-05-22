@@ -11,7 +11,7 @@ from core.models import (
     EthnicGroup,
     Tag)
 from culture.serializers import CultureSerializer, CultureDetailsSerializer
-
+from core.helpers import create_user
 
 CULTURE_URL = reverse('culture:culture-list')
 
@@ -45,6 +45,11 @@ def create_culture(user, **params):
 def details_url(culture_id):
     """Returns the details url"""
     return reverse('culture:culture-detail', args=[culture_id])
+
+
+def image_upload_url(culture_id):
+    """Returns the image upload url"""
+    return reverse('culture:culture-upload-image', args=[culture_id])
 
 
 class PublicCultureTests(TestCase):
@@ -297,3 +302,17 @@ class PrivateCultureTests(TestCase):
         self.assertIn(s1.data, res.data)
         self.assertIn(s2.data, res.data)
         self.assertNotIn(s3.data, res.data)
+
+
+class CultureImageUploadTests(TestCase):
+    """Test image upload"""
+
+    def setUp(self):
+        self.client = APIClient()
+
+        self.user = create_user(
+            email='testuser@example.com',
+            password='testpassword123')
+
+        self.client.force_authenticate(self.user)
+        self.culture = create_culture(user=self.user)
