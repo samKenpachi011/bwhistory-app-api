@@ -97,7 +97,7 @@
 
 
 
-- Creating a super user `docker-compose run --rm app sh -c "python manage.py createsuperuser`
+- Creating a super user `docker-compose run --rm app sh -c "python manage.py createsuperuser"`
 <br/>
 
 
@@ -113,6 +113,7 @@
     | Description | Possible Solution |
     | ----------- | ----------- |
     | 0001_initial is applied before is dependency | clear the devdb volume |
+    | django.db.utils.ProgrammingError: relation "core_user" does not exist | clear migrations and make migrations again for the core app |
 
 <br/>
 

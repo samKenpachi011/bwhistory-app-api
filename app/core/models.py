@@ -1,5 +1,3 @@
-import uuid
-import os
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import (
@@ -7,17 +5,7 @@ from django.contrib.auth.models import (
     PermissionsMixin
 )
 from .managers import UserManager
-from core.helpers import culture_image_path
-
-
-def ethnic_group_image_path(instance, filename):
-    """Generate file path for ethnic group image"""
-
-    # get the extension of the image
-    ext = os.path.splitext(filename)[1]
-    filename = f'{uuid.uuid4()}{ext}'
-
-    return os.path.join('uploads', 'ethnic_group', filename)
+from core.helpers import image_path
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -49,7 +37,7 @@ class EthnicGroup(models.Model):
     geography = models.CharField(max_length=200, blank=True)
     history = models.TextField(blank=True)
     tags = models.ManyToManyField('Tag')
-    image = models.ImageField(null=True, upload_to=ethnic_group_image_path)
+    image = models.ImageField(null=True, upload_to=image_path)
 
     class Meta:
         verbose_name_plural = "Ethnic Groups"
@@ -86,7 +74,7 @@ class Culture(models.Model):
         null=True, blank=True
     )
     tags = models.ManyToManyField('Tag')
-    image = models.ImageField(null=True, upload_to=culture_image_path)
+    image = models.ImageField(null=True, upload_to=image_path)
 
     def __str__(self):
         return self.name
