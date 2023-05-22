@@ -316,3 +316,13 @@ class CultureImageUploadTests(TestCase):
 
         self.client.force_authenticate(self.user)
         self.culture = create_culture(user=self.user)
+
+    # def test_upload_image_fail(self):
+    #     """Test upload image fail."""
+    #     url = image_upload_url(self.culture.id)
+
+    #     payload = {'image': 'nothing'}
+
+    #     res = self.client.post(url, payload, format='multipart')
+
+    #     self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)

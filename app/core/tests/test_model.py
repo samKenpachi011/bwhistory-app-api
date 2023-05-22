@@ -7,7 +7,7 @@ from core import models
 from core.helpers import (
     get_user_model,
     create_user,
-    image_path)
+    culture_image_path)
 
 
 class ModelTests(TestCase):
@@ -144,6 +144,6 @@ class ModelTests(TestCase):
         uuid = 'test-uuid'
         mock_uuid.return_value = uuid
 
-        file_path = image_path('culture', 'example.jpg')
+        file_path = culture_image_path(None, 'example.jpg')
 
         self.assertEqual(file_path, f'uploads/culture/{uuid}.jpg')

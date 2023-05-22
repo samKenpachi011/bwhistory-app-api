@@ -7,7 +7,7 @@ from django.contrib.auth.models import (
     PermissionsMixin
 )
 from .managers import UserManager
-from core.helpers import image_path
+from core.helpers import culture_image_path
 
 
 def ethnic_group_image_path(instance, filename):
@@ -86,7 +86,7 @@ class Culture(models.Model):
         null=True, blank=True
     )
     tags = models.ManyToManyField('Tag')
-    image = models.ImageField(null=True, upload_to=image_path)
+    image = models.ImageField(null=True, upload_to=culture_image_path)
 
     def __str__(self):
         return self.name

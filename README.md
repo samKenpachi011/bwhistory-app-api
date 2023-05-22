@@ -275,6 +275,7 @@
 - Add a filtering feature for ethinic groups
 - Add a culture app for creating, updating and viewing different cultures
 - Add a tag feature for tagging cultures
+- Add a image api for culture and create a custom action to upload the image
 
 ## Contributions
 - After cloning the repo change to the dev branch and create pull requests from there.

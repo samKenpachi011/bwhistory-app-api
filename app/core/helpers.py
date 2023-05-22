@@ -31,10 +31,10 @@ def _get_or_create(user, tags, instance):
 
 
 # generate file path for images
-def image_path(instance, filename):
+def culture_image_path(instance, filename):
     """Generate a path for instance images"""
 
     ext = os.path.splitext(filename)[1]
     filename = f'{uuid.uuid4()}{ext}'
 
-    return os.path.join('uploads', instance, filename)
+    return os.path.join('uploads', 'culture', filename)
