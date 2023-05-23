@@ -123,6 +123,46 @@ class ModelTests(TestCase):
 
         self.assertEqual(str(culture), culture.name)
 
+# Events model
+    def test_creating_event_sucsess(self):
+        """Test creating event"""
+        user = get_user_model().objects.create_user(
+            email='test@example.com',
+            password='testpass123'
+        )
+
+        event = models.Event.objects.create(
+            user=user,
+            name='Test Event',
+            description='Test Event',
+            event_type='traditional',
+        )
+
+        self.assertEqual(str(event), event.name)
+
+    @patch('uuid.uuid4')
+    def test_event_image_success(self, mock_uuid):
+        """Test event image upload"""
+        user = get_user_model().objects.create_user(
+            email='test@example.com',
+            password='testpass123'
+        )
+
+        self.event = models.Event.objects.create(
+            user=user,
+            name='Test Event',
+            description='Test Event',
+            event_type='traditional',
+        )
+
+        event_images = models.EventImages.objects.create(
+            event=self.event,
+            images='example.jpg',
+        )
+        path = '/vol/web/media/example.jpg'
+        self.assertEqual(event_images.event, self.event)
+        self.assertEqual(event_images.images.path, f'{path}')
+
 # Generic image path test
     @patch('uuid.uuid4')
     def test_image_path(self, mock_uuid):

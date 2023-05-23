@@ -47,3 +47,5 @@ class UserAdmin(BaseUserAdmin):
 admin.site.register(models.EthnicGroup)
 admin.site.register(models.Tag)
 admin.site.register(models.Culture)
+admin.site.register(models.Event)
+admin.site.register(models.EventImages)
