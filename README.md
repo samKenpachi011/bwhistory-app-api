@@ -48,6 +48,17 @@
 - app/culture/apps
 - app/culture/views
 
+### **Event App**
+- Used for creating, updating and viewing events.
+
+**Event App structure**
+- app/event/tests/
+- app/event/urls
+- app/event/serializers
+- app/event/apps
+- app/event/views
+
+
 | Syntax | Description |
 | ----------- | ----------- |
 | `docker-compose run --rm app sh -c "python manage.py startapp user"`| Create a user app |
