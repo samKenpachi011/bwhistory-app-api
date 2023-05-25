@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 from core.helpers import create_user
 from core.models import Event
-from event.serializers import EventSerializer
+from event.serializers import EventSerializer, EventDetailsSerializer
 
 
 EVENT_URL = reverse('event:event-list')
@@ -24,6 +24,11 @@ def create_event(user, **params):
 
     event = Event.objects.create(user=user, **defaults)
     return event
+
+
+def details_url(event_id):
+    """Returns the details url for a given event"""
+    return reverse('event:event-detail', args=[event_id])
 
 
 class PublicEventTests(TestCase):
@@ -47,8 +52,6 @@ class PrivateEventTests(TestCase):
         )
 
         self.client.force_authenticate(self.user)
-
-        self.event = create_event(user=self.user)
 
     def test_retrieve_event(self):
         """Test retrieve event"""
@@ -78,3 +81,14 @@ class PrivateEventTests(TestCase):
         event = Event.objects.get(id=res.data['id'])
         self.assertEqual(self.user, event.user)
         self.assertEqual(payload['name'], event.name)
+
+    def test_get_event_details(self):
+        """Test get event details"""
+        event = create_event(user=self.user)
+        url = details_url(event.id)
+
+        res = self.client.get(url)
+
+        serializer = EventDetailsSerializer(event)
+
+        self.assertEqual(res.data, serializer.data)
