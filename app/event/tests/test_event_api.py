@@ -19,7 +19,7 @@ def create_event(user, **params):
     defaults = {
         'name': 'Event 1',
         'description': 'Event description',
-        'event_type': 'Festive',
+        'event_type': 'festive',
     }
 
     event = Event.objects.create(user=user, **defaults)
@@ -62,3 +62,19 @@ class PrivateEventTests(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
+
+    def test_create_event(self):
+        """Test creating an event"""
+        payload = {
+            'name': 'Event 2',
+            'description': 'Event description',
+            'event_type': 'festive',
+        }
+
+        res = self.client.post(EVENT_URL, payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+
+        event = Event.objects.get(id=res.data['id'])
+        self.assertEqual(self.user, event.user)
+        self.assertEqual(payload['name'], event.name)

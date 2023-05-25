@@ -18,3 +18,7 @@ class EventViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """Retrieve event objects for authenticated users."""
         return self.queryset.order_by('-id')
+
+    def perform_create(self, serializer):
+        """Create a new event"""
+        serializer.save(user=self.request.user)
