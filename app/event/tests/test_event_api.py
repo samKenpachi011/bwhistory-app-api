@@ -92,3 +92,45 @@ class PrivateEventTests(TestCase):
         serializer = EventDetailsSerializer(event)
 
         self.assertEqual(res.data, serializer.data)
+
+    def test_event_partial_update(self):
+        """Test event update"""
+        event = create_event(user=self.user)
+        url = details_url(event.id)
+
+        payload = {
+            'description': 'New description'
+        }
+
+        res = self.client.patch(url, payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        event.refresh_from_db()
+        self.assertEqual(event.description, payload['description'])
+
+    def test_event_full_update(self):
+        """Test event full update"""
+
+        event = create_event(user=self.user)
+
+        payload = {
+            'name': 'Event Test',
+            'description': 'New description',
+        }
+        url = details_url(event.id)
+
+        self.client.patch(url, payload)
+
+        event.refresh_from_db()
+        for k, v in payload.items():
+            self.assertEqual(getattr(event, k), v)
+
+    def test_event_delete(self):
+        """Test event deletion"""
+        event = create_event(user=self.user)
+        url = details_url(event.id)
+
+        res = self.client.delete(url)
+
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Event.objects.filter(id=event.id).exists())

@@ -25,6 +25,14 @@ class EventSerializer(serializers.ModelSerializer):
         event = Event.objects.create(**validated_data)
         return event
 
+    def update(self, instance, validated_data):
+        """Update event override"""
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+        return instance
+
 
 class EventDetailsSerializer(EventSerializer):
     """Serializer for Event details view"""
