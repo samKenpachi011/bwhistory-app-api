@@ -48,6 +48,17 @@
 - app/culture/apps
 - app/culture/views
 
+### **Event App**
+- Used for creating, updating and viewing events.
+
+**Event App structure**
+- app/event/tests/
+- app/event/urls
+- app/event/serializers
+- app/event/apps
+- app/event/views
+
+
 | Syntax | Description |
 | ----------- | ----------- |
 | `docker-compose run --rm app sh -c "python manage.py startapp user"`| Create a user app |
@@ -277,6 +288,8 @@
 - Add a culture app for creating, updating and viewing different cultures
 - Add a tag feature for tagging cultures
 - Add a image api for culture and create a custom action to upload the image
+- Add a event app for creating, updating and viewing events
+
 
 ## Contributions
 - After cloning the repo change to the dev branch and create pull requests from there.

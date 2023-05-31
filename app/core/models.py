@@ -6,6 +6,7 @@ from django.contrib.auth.models import (
 )
 from .managers import UserManager
 from core.helpers import image_path
+from .choices import EVENT_TYPE_CHOICES
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -78,3 +79,34 @@ class Culture(models.Model):
 
     def __str__(self):
         return self.name
+
+
+# Event model
+class Event(models.Model):
+    """Class representing events"""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        on_delete=models.SET_NULL
+    )
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+    event_type = models.CharField(
+        max_length=100,
+        blank=True,
+        choices=EVENT_TYPE_CHOICES)
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class EventImages(models.Model):
+    """Class representing event images"""
+    event = models.ForeignKey(
+        Event,
+        related_name='images',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+    images = models.ImageField(null=True, upload_to=image_path)
