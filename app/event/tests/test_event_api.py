@@ -7,6 +7,8 @@ from rest_framework import status
 from rest_framework.test import APIClient
 from core.helpers import create_user
 from core.models import Event
+import tempfile
+from PIL import Image
 from event.serializers import EventSerializer, EventDetailsSerializer
 
 
@@ -29,6 +31,11 @@ def create_event(user, **params):
 def details_url(event_id):
     """Returns the details url for a given event"""
     return reverse('event:event-detail', args=[event_id])
+
+
+def event_upload_image(event_id):
+    """Returns the image upload url for a given event"""
+    return reverse('event:event-upload-image', args=[event_id])
 
 
 class PublicEventTests(TestCase):
@@ -134,3 +141,43 @@ class PrivateEventTests(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Event.objects.filter(id=event.id).exists())
+
+
+class EventImageUploadTestCase(TestCase):
+    """Test for Event Image Uploads"""
+
+    def setUp(self):
+        self.client = APIClient()
+        self.user = create_user(
+            email='testuser@example.com',
+            password='testpassword123'
+        )
+
+        self.client.force_authenticate(self.user)
+        self.event = create_event(user=self.user)
+
+    def test_event_image_upload_fail(self):
+        """Test that an image upload fails"""
+        url = event_upload_image(self.event.id)
+
+        payload = {'image': 'no_image'}
+
+        res = self.client.post(url, payload, format='multipart')
+
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_event_image_upload(self):
+        """Test an image upload"""
+        url = event_upload_image(self.event.id)
+
+        with tempfile.NamedTemporaryFile(suffix='.jpg') as image_file:
+            img = Image.new('RGB', (10, 10))
+            img.save(image_file, format='JPEG')
+            image_file.seek(0)
+            payload = {'image': image_file}
+
+            res = self.client.post(url, payload, format='multpart')
+
+            self.event.refresh_from_db()
+            self.assertEqual(res.status_code, status.HTTP_200_OK)
+            self.assertIn('image', res.data)
