@@ -1,12 +1,16 @@
 """
 Test event api's
 """
+from django.test import tag
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 from core.helpers import create_user
-from core.models import Event
+from core.models import Event, EventImages
+import tempfile
+import os
+from PIL import Image
 from event.serializers import EventSerializer, EventDetailsSerializer
 
 
@@ -29,6 +33,19 @@ def create_event(user, **params):
 def details_url(event_id):
     """Returns the details url for a given event"""
     return reverse('event:event-detail', args=[event_id])
+
+
+def event_upload_image(event_id):
+    """Returns the image upload url for a given event"""
+    return reverse('event:event-upload-image', args=[event_id])
+
+
+def get_image():
+    """Creates and return an image"""
+    image = Image.new("RGB", (10, 10))
+    file = tempfile.NamedTemporaryFile(suffix=".jpg")
+    image.save(file, format='JPEG')
+    return file
 
 
 class PublicEventTests(TestCase):
@@ -69,12 +86,13 @@ class PrivateEventTests(TestCase):
     def test_create_event(self):
         """Test creating an event"""
         payload = {
-            'name': 'Event 2',
+            'name': 'Event 9',
             'description': 'Event description',
             'event_type': 'festive',
+            'uploaded_images': '',
         }
 
-        res = self.client.post(EVENT_URL, payload, format='json')
+        res = self.client.post(EVENT_URL, payload, format='multipart')
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
@@ -102,7 +120,7 @@ class PrivateEventTests(TestCase):
             'description': 'New description'
         }
 
-        res = self.client.patch(url, payload, format='json')
+        res = self.client.patch(url, payload, format='multipart')
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         event.refresh_from_db()
@@ -134,3 +152,45 @@ class PrivateEventTests(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Event.objects.filter(id=event.id).exists())
+
+
+@tag('slow')
+class EventImageUploadTestCase(TestCase):
+    """Test for Event Image Uploads"""
+
+    def setUp(self):
+        self.client = APIClient()
+        self.user = create_user(
+            email='testuser@example.com',
+            password='testpassword123'
+        )
+
+        self.client.force_authenticate(self.user)
+        self.event = create_event(user=self.user)
+
+    def test_image_upload_with_existing_event(self):
+        """Test event image upload with existing event"""
+        url = details_url(self.event.id)
+        payload = {
+            'uploaded_images': [get_image(), get_image()]
+        }
+
+        res = self.client.patch(url, payload, format='multipart')
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+    def test_image_upload_with_new_event(self):
+        """Test event image upload on event create"""
+        payload = {
+            'name': 'Event 3',
+            'description': 'Event description',
+            'event_type': 'festive',
+            'uploaded_images': [get_image(), get_image()]
+        }
+
+        res = self.client.post(EVENT_URL, payload, format='multipart')
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+
+        event_imgs = EventImages.objects.filter(event_id=res.data['id'])
+        self.assertIn('images', res.data)
+        self.assertTrue(os.path.exists(event_imgs[0].images.path))

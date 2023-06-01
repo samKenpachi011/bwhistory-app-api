@@ -6,10 +6,12 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from core.models import Event
 from event import serializers
+from rest_framework.parsers import MultiPartParser, FormParser
 
 
 class EventViewSet(viewsets.ModelViewSet):
     """View for managing event information"""
+    parser_classes = (MultiPartParser, FormParser)
     serializer_class = serializers.EventDetailsSerializer
     queryset = Event.objects.all()
     authentication_classes = [TokenAuthentication]
@@ -28,4 +30,5 @@ class EventViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         """Create a new event"""
-        serializer.save(user=self.request.user)
+        if serializer.is_valid():
+            serializer.save(user=self.request.user)
