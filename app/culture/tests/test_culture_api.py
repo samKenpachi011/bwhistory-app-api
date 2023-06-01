@@ -282,7 +282,7 @@ class PrivateCultureTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertNotIn(tag, culture.tags.all())
 
-    def test_filter_culture_tags9(self):
+    def test_filter_culture_tags(self):
         """Test filter culture by tags"""
         culture1 = create_culture(user=self.user, name='Culture 1')
         culture2 = create_culture(user=self.user, name='Culture 2')

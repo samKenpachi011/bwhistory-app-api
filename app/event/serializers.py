@@ -5,8 +5,8 @@ from rest_framework import serializers
 from core.models import Event, EventImages
 
 
-class EventImageSerializer(serializers.ModelSerializer):
-    """Serializer for EventImage models"""
+class EventImagesSerializer(serializers.ModelSerializer):
+    """Serializer for event images view"""
     class Meta:
         model = EventImages
         fields = ['id', 'event', 'images']
@@ -15,14 +15,27 @@ class EventImageSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.ModelSerializer):
     """Serializer for the Event model."""
+    images = EventImagesSerializer(many=True, required=False)
+    uploaded_images = serializers.ListField(
+        write_only=True
+    )
+
     class Meta:
         model = Event
-        fields = ['id', 'name']
+        fields = ['id', 'name', 'images', 'uploaded_images']
         read_only_fields = ['id']
 
     def create(self, validated_data):
         """Create a new Event override"""
+        images = validated_data.pop('uploaded_images', None)
         event = Event.objects.create(**validated_data)
+
+        if images is not None:
+            EventImages.objects.bulk_create(
+                [EventImages(event=event,
+                             images=image_data) for image_data in images]
+            )
+
         return event
 
     def update(self, instance, validated_data):
