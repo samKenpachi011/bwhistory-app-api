@@ -10,7 +10,7 @@ from chief import serializers
 
 class ChiefViewSet(viewsets.ModelViewSet):
     """View for managing chief information"""
-    serializer_class = serializers.ChiefSerializer
+    serializer_class = serializers.ChiefDetailsSerializer
     queryset = Chief.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -18,3 +18,15 @@ class ChiefViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """Returns chief objects"""
         return self.queryset.order_by('-id')
+
+    def get_serializer_class(self):
+        """Returns serializer class for the request"""
+        if self.action == 'list':
+            return serializers.ChiefSerializer
+
+        return self.serializer_class
+
+    def perform_create(self, serializer):
+        """Create a new chief"""
+        if serializer.is_valid():
+            serializer.save(user=self.request.user)
