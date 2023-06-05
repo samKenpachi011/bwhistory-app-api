@@ -6,7 +6,7 @@ from django.contrib.auth.models import (
 )
 from .managers import UserManager
 from core.helpers import image_path
-from .choices import EVENT_TYPE_CHOICES
+from .choices import EVENT_TYPE_CHOICES, CHIEF_TYPE
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -125,6 +125,10 @@ class Chief(models.Model):
         on_delete=models.CASCADE,
         null=True, blank=True
     )
+    type = models.CharField(
+        max_length=100,
+        blank=True,
+        choices=CHIEF_TYPE)
     date_of_birth = models.DateField(null=True, blank=True)
     date_of_appointment = models.DateField(null=True, blank=True)
     is_current = models.BooleanField(default=True)

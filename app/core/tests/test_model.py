@@ -186,6 +186,7 @@ class ModelTests(TestCase):
         chief_test = models.Chief.objects.create(
             name='Chief Test',
             ethnic_group=self.ethnic_group,
+            type='paramount',
             date_of_birth='1980-01-01',
             date_of_appointment='2000-01-01',
             is_current=True,
