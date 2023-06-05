@@ -110,3 +110,25 @@ class EventImages(models.Model):
         blank=True
     )
     images = models.ImageField(null=True, upload_to=image_path)
+
+
+class Chief(models.Model):
+    """Class representing chiefs"""
+    name = models.CharField(max_length=200)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        on_delete=models.SET_NULL
+    )
+    ethnic_group = models.ForeignKey(
+        EthnicGroup, related_name="ethnicgroup",
+        on_delete=models.CASCADE,
+        null=True, blank=True
+    )
+    date_of_birth = models.DateField(null=True, blank=True)
+    date_of_appointment = models.DateField(null=True, blank=True)
+    is_current = models.BooleanField(default=True)
+    bio = models.TextField(blank=True)
+
+    def __str__(self) -> str:
+        return self.name
