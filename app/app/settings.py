@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'core',
     'ethnic_group',
     'culture',
+    'chief',
     'event',
     'rest_framework',
     'rest_framework.authtoken',
