@@ -15,9 +15,11 @@ class EventImagesSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.ModelSerializer):
     """Serializer for the Event model."""
-    images = EventImagesSerializer(many=True, required=False)
+    images = EventImagesSerializer(many=True, required=False, read_only=True)
     uploaded_images = serializers.ListField(
-        write_only=True
+        child=serializers.ImageField(allow_empty_file=False, use_url=False),
+        write_only=True,
+        required=False,
     )
 
     class Meta:
@@ -40,6 +42,7 @@ class EventSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         """Update event override"""
+
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
 

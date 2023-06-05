@@ -1,7 +1,6 @@
 """
 Test event api's
 """
-from django.test import tag
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -45,7 +44,8 @@ def get_image():
     image = Image.new("RGB", (10, 10))
     file = tempfile.NamedTemporaryFile(suffix=".jpg")
     image.save(file, format='JPEG')
-    return file
+    _file = open(file.name, 'rb')
+    return _file
 
 
 class PublicEventTests(TestCase):
@@ -89,7 +89,6 @@ class PrivateEventTests(TestCase):
             'name': 'Event 9',
             'description': 'Event description',
             'event_type': 'festive',
-            'uploaded_images': '',
         }
 
         res = self.client.post(EVENT_URL, payload, format='multipart')
@@ -154,7 +153,6 @@ class PrivateEventTests(TestCase):
         self.assertFalse(Event.objects.filter(id=event.id).exists())
 
 
-@tag('slow')
 class EventImageUploadTestCase(TestCase):
     """Test for Event Image Uploads"""
 
@@ -188,7 +186,6 @@ class EventImageUploadTestCase(TestCase):
         }
 
         res = self.client.post(EVENT_URL, payload, format='multipart')
-
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
         event_imgs = EventImages.objects.filter(event_id=res.data['id'])
