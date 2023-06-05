@@ -58,6 +58,17 @@
 - app/event/apps
 - app/event/views
 
+### **Chief App**
+- Used for creating, updating and viewing chiefs.
+
+**Chiefs App structure**
+- app/chief/tests/
+- app/chief/urls
+- app/chief/serializers
+- app/chief/apps
+- app/chief/views
+
+
 
 | Syntax | Description |
 | ----------- | ----------- |
@@ -289,6 +300,7 @@
 - Add a tag feature for tagging cultures
 - Add a image api for culture and create a custom action to upload the image
 - Add a event app for creating, updating and viewing events
+- Add a chief app for creating, updating and viewing chiefs information
 
 
 ## Contributions

@@ -5,3 +5,9 @@ EVENT_TYPE_CHOICES = (
         ('festive', 'Festive'),
         ('ritual', 'Ritual')
     )
+
+CHIEF_TYPE = (
+        ('paramount', 'Paramount'),
+        ('subchief', 'Sub Chief'),
+        ('divisional', 'Divisional')
+    )

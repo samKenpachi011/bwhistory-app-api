@@ -32,6 +32,7 @@ urlpatterns = [
     path('api/ethnic_group/', include('ethnic_group.urls')),
     path('api/culture/', include('culture.urls')),
     path('api/event/', include('event.urls')),
+    path('api/chief/', include('chief.urls')),
 ]
 
 

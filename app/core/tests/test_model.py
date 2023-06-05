@@ -1,7 +1,7 @@
 """
 Tests for models
 """
-from django.test import TestCase
+from django.test import TestCase, tag
 from unittest.mock import patch
 from core import models
 from core.helpers import (
@@ -10,6 +10,7 @@ from core.helpers import (
     image_path)
 
 
+@tag('mdls')
 class ModelTests(TestCase):
     """Test models"""
 
@@ -162,6 +163,37 @@ class ModelTests(TestCase):
         path = '/vol/web/media/example.jpg'
         self.assertEqual(event_images.event, self.event)
         self.assertEqual(event_images.images.path, f'{path}')
+
+# Chiefs model
+
+    def test_create_chief_success(self):
+        """Test creating a chief object success"""
+        user = get_user_model().objects.create_user(
+            email='test@example.com',
+            password='testpass123'
+        )
+
+        self.ethnic_group = models.EthnicGroup.objects.create(
+            user=user,
+            name='Tswana',
+            description='The Tswana are a Bantu-speaking ethnic group',
+            language='Setswana',
+            population=0*100,
+            geography='Botswana',
+            history='A brief history of the Tswana ethnic group.'
+        )
+
+        chief_test = models.Chief.objects.create(
+            name='Chief Test',
+            ethnic_group=self.ethnic_group,
+            type='paramount',
+            date_of_birth='1980-01-01',
+            date_of_appointment='2000-01-01',
+            is_current=True,
+            bio='Test bio',
+        )
+
+        self.assertEqual(str(chief_test), chief_test.name)
 
 # Generic image path test
     @patch('uuid.uuid4')
