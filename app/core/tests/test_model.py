@@ -240,6 +240,5 @@ class ModelTests(TestCase):
         milliseconds = dt.strftime('%f')[:-4]
         dt = dt.strftime('%Y-%m-%dT%H:%M:%S')
         df = f'{dt}{milliseconds}'
-        breakpoint()
 
         self.assertEqual(doc_path, f'uploads/documents/{uuid}{df}.pdf')

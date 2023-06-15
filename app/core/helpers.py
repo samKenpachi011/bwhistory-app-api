@@ -56,6 +56,5 @@ def document_path(instance, filename):
     milliseconds = dt.strftime('%f')[:-4]
     dt = dt.strftime('%Y-%m-%dT%H:%M:%S')
     filename = f'{uuid.uuid4()}{dt}{milliseconds}{ext}'
-    print(f'.........mils.......{milliseconds}')
 
     return os.path.join('uploads', class_name, filename)
