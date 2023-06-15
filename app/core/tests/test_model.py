@@ -237,7 +237,7 @@ class ModelTests(TestCase):
 
         doc_path = document_path(None, 'example.pdf')
         dt = datetime.datetime.now()
-        milliseconds = dt.microsecond // 1000
+        milliseconds = dt.strftime('%f')[:-3]
         dt = dt.strftime('%Y-%m-%dT%H:%M:%S')
         df = f'{dt}{milliseconds}'
 

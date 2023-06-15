@@ -53,7 +53,7 @@ def document_path(instance, filename):
     class_name = 'documents'
     ext = os.path.splitext(filename)[1]
     dt = datetime.datetime.now()
-    milliseconds = dt.microsecond // 1000
+    milliseconds = dt.strftime('%f')[:-3]
     dt = dt.strftime('%Y-%m-%dT%H:%M:%S')
     filename = f'{uuid.uuid4()}{dt}{milliseconds}{ext}'
 
