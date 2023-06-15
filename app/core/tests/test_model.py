@@ -211,7 +211,7 @@ class ModelTests(TestCase):
 # Publisher model
     @patch('uuid.uuid4')
     def test_publisher_publish_success(self, mock_uuid):
-        """Test event image upload"""
+        """Test publisher upload"""
         user = get_user_model().objects.create_user(
             email='test@example.com',
             password='testpass123'
@@ -223,5 +223,5 @@ class ModelTests(TestCase):
             document_type='article',
         )
         path = '/vol/web/media/example.pdf'
-        breakpoint()
+
         self.assertEqual(published_document.document.path, f'{path}')
