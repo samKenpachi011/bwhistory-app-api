@@ -7,7 +7,9 @@ from core import models
 from core.helpers import (
     get_user_model,
     create_user,
-    image_path)
+    image_path,
+    document_path)
+import datetime
 
 
 @tag('mdls')
@@ -206,3 +208,37 @@ class ModelTests(TestCase):
         file_path = image_path(None, 'example.jpg')
 
         self.assertEqual(file_path, f'uploads/test/{uuid}.jpg')
+
+# Publisher model
+    @patch('uuid.uuid4')
+    def test_publisher_publish_success(self, mock_uuid):
+        """Test publisher upload"""
+        user = get_user_model().objects.create_user(
+            email='test@example.com',
+            password='testpass123'
+        )
+
+        published_document = models.Publisher.objects.create(
+            user=user,
+            document='example.pdf',
+            document_type='article',
+        )
+        path = '/vol/web/media/example.pdf'
+
+        self.assertEqual(published_document.document.path, f'{path}')
+
+# Generic document path test
+    @patch('uuid.uuid4')
+    def test_document_path(self, mock_uuid):
+        """Test creating an document path for instances"""
+
+        uuid = 'test-uuid'
+        mock_uuid.return_value = uuid
+
+        doc_path = document_path(None, 'example.pdf')
+        dt = datetime.datetime.now()
+        milliseconds = dt.strftime('%f')[:-4]
+        dt = dt.strftime('%Y-%m-%dT%H:%M:%S')
+        df = f'{dt}{milliseconds}'
+
+        self.assertEqual(doc_path, f'uploads/documents/{uuid}{df}.pdf')

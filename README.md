@@ -301,6 +301,7 @@
 - Add a image api for culture and create a custom action to upload the image
 - Add a event app for creating, updating and viewing events
 - Add a chief app for creating, updating and viewing chiefs information
+- Add a publisher app for creating, updating and viewing published documents
 
 
 ## Contributions
