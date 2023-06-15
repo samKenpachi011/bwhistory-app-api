@@ -5,8 +5,11 @@ from django.contrib.auth.models import (
     PermissionsMixin
 )
 from .managers import UserManager
-from core.helpers import image_path
-from .choices import EVENT_TYPE_CHOICES, CHIEF_TYPE
+from core.helpers import image_path, document_path
+from .choices import (
+    EVENT_TYPE_CHOICES,
+    CHIEF_TYPE,
+    DOCUMENT_TYPE)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -136,3 +139,20 @@ class Chief(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+
+# Publisher Model
+class Publisher(models.Model):
+    """Class representing published documents"""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        on_delete=models.SET_NULL
+    )
+    document_type = models.CharField(
+        max_length=100,
+        blank=True,
+        choices=DOCUMENT_TYPE)
+    document = models.FileField(upload_to=document_path,
+                                null=True, blank=True)
+    is_published = models.BooleanField(default=False)

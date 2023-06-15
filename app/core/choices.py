@@ -11,3 +11,12 @@ CHIEF_TYPE = (
         ('subchief', 'Sub Chief'),
         ('divisional', 'Divisional')
     )
+
+
+DOCUMENT_TYPE = (
+        ('article', 'Article'),
+        ('conference_paper', 'Conference paper'),
+        ('research_paper', 'Research paper'),
+        ('book', 'Book'),
+        ('chapters', 'Chapter'),
+    )

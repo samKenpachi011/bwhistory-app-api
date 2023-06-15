@@ -7,6 +7,7 @@ import os
 from django.contrib.auth import get_user_model
 from core import models
 from rest_framework.test import APIClient # noqa
+import datetime
 
 
 def create_user(email, password):
@@ -43,5 +44,17 @@ def image_path(instance, filename):
         class_name = 'culture'
     else:
         class_name = 'test'
+
+    return os.path.join('uploads', class_name, filename)
+
+
+def document_path(instance, filename):
+    """Generate a path for instance documents"""
+    class_name = 'documents'
+    ext = os.path.splitext(filename)[1]
+    dt = datetime.datetime.now()
+    milliseconds = dt.microsecond // 1000
+    dt = dt.strftime('%Y-%m-%dT%H:%M:%S')
+    filename = f'{uuid.uuid4()}{dt}{milliseconds}{ext}'
 
     return os.path.join('uploads', class_name, filename)
