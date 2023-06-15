@@ -9,6 +9,7 @@ from core.helpers import (
     create_user,
     image_path,
     document_path)
+import datetime
 
 
 @tag('mdls')
@@ -225,3 +226,19 @@ class ModelTests(TestCase):
         path = '/vol/web/media/example.pdf'
 
         self.assertEqual(published_document.document.path, f'{path}')
+
+# Generic document path test
+    @patch('uuid.uuid4')
+    def test_document_path(self, mock_uuid):
+        """Test creating an document path for instances"""
+
+        uuid = 'test-uuid'
+        mock_uuid.return_value = uuid
+
+        doc_path = document_path(None, 'example.pdf')
+        dt = datetime.datetime.now()
+        milliseconds = dt.microsecond // 1000
+        dt = dt.strftime('%Y-%m-%dT%H:%M:%S')
+        df = f'{dt}{milliseconds}'
+
+        self.assertEqual(doc_path, f'uploads/documents/{uuid}{df}.pdf')
