@@ -68,6 +68,17 @@
 - app/chief/apps
 - app/chief/views
 
+### **Publisher App**
+- Used for creating, updating and viewing published documents.
+
+**Publisher App structure**
+- app/publisher/tests/
+- app/publisher/urls
+- app/publisher/serializers
+- app/publisher/apps
+- app/publisher/views
+
+
 
 
 | Syntax | Description |
