@@ -1,7 +1,7 @@
 """
 Test publisher api's
 """
-from django.test import TestCase
+from django.test import TestCase, tag
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -36,6 +36,7 @@ class PublicPublisherTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
+@tag('pls')
 class PrivatePublisherTests(TestCase):
     """Tests authenticated users"""
     def setUp(self):
