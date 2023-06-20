@@ -67,7 +67,6 @@ class PrivatePublisherTests(TestCase):
                 content_type='application/pdf'
             ),
             'document_type': 'chapter'
-
         }
 
         res = self.client.post(PUBLISHER_URL, payload, format='multipart')
@@ -77,3 +76,19 @@ class PrivatePublisherTests(TestCase):
         document = Publisher.objects.filter(id=res.data['id'])
         self.assertIn('document', res.data)
         self.assertTrue(os.path.exists(document[0].document.path))
+
+    def test_create_document_fail(self):
+        """Test creating fail"""
+        payload = {
+            'document': SimpleUploadedFile(
+                'file2.txt',
+                b'file_content',
+                content_type='application/pdf'
+            ),
+            'document_type': 'chapter'
+        }
+
+        res = self.client.post(PUBLISHER_URL, payload, format='multipart')
+
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertNotIn('document', res.data)
