@@ -33,6 +33,7 @@ urlpatterns = [
     path('api/culture/', include('culture.urls')),
     path('api/event/', include('event.urls')),
     path('api/chief/', include('chief.urls')),
+    path('api/publisher/', include('publisher.urls')),
 ]
 
 

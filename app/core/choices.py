@@ -18,5 +18,5 @@ DOCUMENT_TYPE = (
         ('conference_paper', 'Conference paper'),
         ('research_paper', 'Research paper'),
         ('book', 'Book'),
-        ('chapters', 'Chapter'),
+        ('chapter', 'Chapter'),
     )
