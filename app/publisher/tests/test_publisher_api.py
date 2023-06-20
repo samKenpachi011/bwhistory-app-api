@@ -1,7 +1,7 @@
 """
 Test publisher api's
 """
-from django.test import TestCase, tag
+from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -41,7 +41,6 @@ class PublicPublisherTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
-@tag('pls')
 class PrivatePublisherTests(TestCase):
     """Tests authenticated users"""
     def setUp(self):
@@ -98,10 +97,42 @@ class PrivatePublisherTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertNotIn('document', res.data)
 
+    def test_full_publisher_update(self):
+        """Test full publisher update"""
+        document = create_document(user=self.user)
+        url = details_url(document.id)
+
+        payload = {
+            'document': SimpleUploadedFile(
+                'example3.pdf',
+                b'file_content',
+                content_type='application/pdf'
+            ),
+            'document_type': 'chapter'
+        }
+        res = self.client.patch(url, payload, format='multipart')
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        document.refresh_from_db()
+        self.assertEqual(document.document_type, payload['document_type'])
+
+    def test_partial_publisher_update(self):
+        """Test partial publisher update"""
+        document = create_document(user=self.user)
+        url = details_url(document.id)
+
+        payload = {
+            'document_type': 'chapter'
+        }
+        res = self.client.patch(url, payload, format='multipart')
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        document.refresh_from_db()
+        self.assertEqual(document.document_type, payload['document_type'])
+
     def test_document_delete(self):
         """Test deleting publisher object"""
-
-        document =  create_document(user=self.user)
+        document = create_document(user=self.user)
         url = details_url(document.id)
 
         res = self.client.delete(url)
