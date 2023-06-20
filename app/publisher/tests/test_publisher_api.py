@@ -25,6 +25,11 @@ def create_document(user, **params):
     return document
 
 
+def details_url(document_id):
+    """Returns the document details url"""
+    return reverse('publisher:publisher-detail', args=[document_id])
+
+
 class PublicPublisherTests(TestCase):
     """Tests for unauthenticated users"""
     def setUp(self):
@@ -92,3 +97,13 @@ class PrivatePublisherTests(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertNotIn('document', res.data)
+
+    def test_document_delete(self):
+        """Test deleting publisher object"""
+
+        document =  create_document(user=self.user)
+        url = details_url(document.id)
+
+        res = self.client.delete(url)
+
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)

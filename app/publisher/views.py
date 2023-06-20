@@ -13,13 +13,18 @@ class PublisherViewSet(viewsets.ModelViewSet):
     """View for managing publisher information"""
 
     parser_classes = (MultiPartParser, FormParser)
-    serializer_class = serializers.PublisherSerializer
+    serializer_class = serializers.PublisherDetailsSerializer
     queryset = Publisher.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return self.queryset.order_by('-id')
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return serializers.PublisherSerializer
+        return self.serializer_class
 
     def perform_create(self, serializer):
         """Create a new publisher"""

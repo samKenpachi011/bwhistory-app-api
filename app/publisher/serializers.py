@@ -12,7 +12,7 @@ class PublisherSerializer(serializers.ModelSerializer):
     """Serializer for the publisher model."""
     class Meta:
         model = Publisher
-        fields = '__all__'
+        fields = ['id', 'document']
         read_only_fields = ['id']
 
     def create(self, validated_data):
@@ -46,3 +46,9 @@ class PublisherSerializer(serializers.ModelSerializer):
             raise ValueError('Invalid file. Only PDF files are allowed.')
 
         return document
+
+
+class PublisherDetailsSerializer(PublisherSerializer):
+    """Serializer for publisher details view"""
+    class Meta(PublisherSerializer.Meta):
+        fields = PublisherSerializer.Meta.fields + ['document_type']
