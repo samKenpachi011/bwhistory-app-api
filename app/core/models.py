@@ -9,7 +9,8 @@ from core.helpers import image_path, document_path
 from .choices import (
     EVENT_TYPE_CHOICES,
     CHIEF_TYPE,
-    DOCUMENT_TYPE)
+    DOCUMENT_TYPE,
+    SITE_TYPE)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -156,3 +157,24 @@ class Publisher(models.Model):
     document = models.FileField(upload_to=document_path,
                                 null=True, blank=True)
     is_published = models.BooleanField(default=False)
+
+
+# Site model
+class Site(models.Model):
+    site_name = models.CharField(max_length=100)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        on_delete=models.SET_NULL
+    )
+    ethnic_group = models.ForeignKey(EthnicGroup, on_delete=models.SET_NULL, null=True, blank=True)
+    culture = models.ForeignKey(Culture, on_delete=models.SET_NULL, null=True, blank=True)
+    site_type = models.CharField(max_length=20, choices=SITE_TYPE)
+    importance = models.PositiveIntegerField()
+    sensitivity = models.PositiveIntegerField()
+    latitude = models.DecimalField(max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.site_name

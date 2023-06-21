@@ -20,3 +20,8 @@ DOCUMENT_TYPE = (
         ('book', 'Book'),
         ('chapter', 'Chapter'),
     )
+
+SITE_TYPE = (
+    ('cultural', 'Cultural'),
+    ('natural', 'Natural'),
+)
