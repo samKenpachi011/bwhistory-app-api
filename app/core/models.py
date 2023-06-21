@@ -167,8 +167,12 @@ class Site(models.Model):
         null=True,
         on_delete=models.SET_NULL
     )
-    ethnic_group = models.ForeignKey(EthnicGroup, on_delete=models.SET_NULL, null=True, blank=True)
-    culture = models.ForeignKey(Culture, on_delete=models.SET_NULL, null=True, blank=True)
+    ethnic_group = models.ForeignKey(
+        EthnicGroup,
+        on_delete=models.SET_NULL, null=True, blank=True)
+    culture = models.ForeignKey(
+        Culture,
+        on_delete=models.SET_NULL, null=True, blank=True)
     site_type = models.CharField(max_length=20, choices=SITE_TYPE)
     importance = models.PositiveIntegerField()
     sensitivity = models.PositiveIntegerField()
