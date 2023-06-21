@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'culture',
     'chief',
     'event',
+    'publisher',
+    'sites',
     'rest_framework',
     'rest_framework.authtoken',
     'drf_spectacular',

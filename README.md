@@ -78,6 +78,17 @@
 - app/publisher/apps
 - app/publisher/views
 
+### **Sites App**
+- Used for creating, updating and viewing sites.
+
+**Sites App structure**
+- app/sites/tests/
+- app/sites/urls
+- app/sites/serializers
+- app/sites/apps
+- app/sites/views
+
+
 
 
 
@@ -313,6 +324,7 @@
 - Add a event app for creating, updating and viewing events
 - Add a chief app for creating, updating and viewing chiefs information
 - Add a publisher app for creating, updating and viewing published documents
+- Add a sites app for creating, updating and viewing sites information
 
 
 ## Contributions
