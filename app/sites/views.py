@@ -10,7 +10,7 @@ from core.models import Site
 
 class SiteViewSet(viewsets.ModelViewSet):
     """View for managing sites"""
-    serializer_class = serializers.SiteSerializer
+    serializer_class = serializers.SiteDetailsSerializer
     queryset = Site.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -18,3 +18,14 @@ class SiteViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """Return site objects"""
         return self.queryset.order_by('-id')
+
+    def get_serializer_class(self):
+        """Return the serializer class for request."""
+        if self.action == 'list':
+            return serializers.SiteSerializer
+
+        return self.serializer_class
+
+    def perform_create(self, serializer):
+        """Create a new site"""
+        serializer.save(user=self.request.user)

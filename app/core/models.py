@@ -174,10 +174,14 @@ class Site(models.Model):
         Culture,
         on_delete=models.SET_NULL, null=True, blank=True)
     site_type = models.CharField(max_length=20, choices=SITE_TYPE)
-    importance = models.PositiveIntegerField()
-    sensitivity = models.PositiveIntegerField()
-    latitude = models.DecimalField(max_digits=9, decimal_places=6)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6)
+    importance = models.PositiveIntegerField(default=1, blank=True, null=True)
+    sensitivity = models.PositiveIntegerField(default=1, blank=True, null=True)
+    latitude = models.DecimalField(
+        max_digits=9, decimal_places=6,
+        default=1, blank=True, null=True)
+    longitude = models.DecimalField(
+        max_digits=9, decimal_places=6,
+        default=1, blank=True, null=True)
     description = models.TextField(blank=True)
 
     def __str__(self):
