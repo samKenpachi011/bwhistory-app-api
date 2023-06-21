@@ -34,6 +34,7 @@ urlpatterns = [
     path('api/event/', include('event.urls')),
     path('api/chief/', include('chief.urls')),
     path('api/publisher/', include('publisher.urls')),
+    path('api/sites/', include('sites.urls')),
 ]
 
 
