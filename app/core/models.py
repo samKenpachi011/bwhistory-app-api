@@ -186,3 +186,15 @@ class Site(models.Model):
 
     def __str__(self):
         return self.site_name
+
+
+class SiteImages(models.Model):
+    """Class representing site images"""
+    site = models.ForeignKey(
+        Site,
+        related_name='images',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+    images = models.ImageField(null=True, upload_to=image_path)

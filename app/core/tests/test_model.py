@@ -20,7 +20,7 @@ class ModelTests(TestCase):
         """Test creating a user with all values"""
         email = 'test@example.com'
         password = 'testpass123'
-        user = get_user_model().objects.create_user(
+        user = create_user(
             email=email,
             password=password,
         )
@@ -210,8 +210,7 @@ class ModelTests(TestCase):
         self.assertEqual(file_path, f'uploads/test/{uuid}.jpg')
 
 # Publisher model
-    @patch('uuid.uuid4')
-    def test_publisher_publish_success(self, mock_uuid):
+    def test_publisher_publish_success(self):
         """Test publisher upload"""
         user = get_user_model().objects.create_user(
             email='test@example.com',
@@ -283,3 +282,48 @@ class ModelTests(TestCase):
         )
 
         self.assertEqual(str(site), site.site_name)
+
+    def test_site_image_upload_success(self):
+        """Test event image upload"""
+        user = get_user_model().objects.create_user(
+            email='test@example.com',
+            password='testpass123'
+        )
+
+        ethnic_group = models.EthnicGroup.objects.create(
+            user=user,
+            name='Test Site Group',
+            description='The Tswana are a Bantu-speaking ethnic group',
+            language='Setswana',
+            population=10*100,
+            geography='Botswana',
+            history='A brief history of the Tswana ethnic group.'
+        )
+
+        culture = models.Culture.objects.create(
+            user=user,
+            ethnic_group=ethnic_group,
+            name='Test Site Culture',
+            description='Test culture'
+        )
+
+        self.site = models.Site.objects.create(
+            user=user,
+            site_name='Test Site Images',
+            ethnic_group=ethnic_group,
+            culture=culture,
+            site_type='Type Test',
+            importance=5.0,
+            sensitivity=5.0,
+            latitude=-24.653257,
+            longitude=25.906792,
+            description='Test Site Images Description'
+        )
+
+        site_images = models.SiteImages.objects.create(
+            site=self.site,
+            images='site_example.jpg',
+        )
+        path = '/vol/web/media/site_example.jpg'
+        self.assertEqual(site_images.site, self.site)
+        self.assertEqual(site_images.images.path, f'{path}')
