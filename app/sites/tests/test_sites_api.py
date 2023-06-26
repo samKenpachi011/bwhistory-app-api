@@ -1,15 +1,16 @@
 """
 Test sites api's
 """
-from django.test import TestCase, tag
+from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
-from core.helpers import create_user
+from core.helpers import create_user, get_image, os
 from core.models import (
     EthnicGroup,
     Culture,
-    Site)
+    Site,
+    SiteImages)
 from sites.serializers import SiteDetailsSerializer
 
 
@@ -80,7 +81,6 @@ class PublicSitesTestCase(TestCase):
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
-@tag('pst')
 class PrivateSitesTestCase(TestCase):
     """Tests for authenticated users"""
 
@@ -199,3 +199,42 @@ class PrivateSitesTestCase(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Site.objects.filter(id=site.id).exists())
+
+
+class SiteImageUploadTestCase(TestCase):
+    """Tests for SiteImage Uploads"""
+    def setUp(self):
+        self.client = APIClient()
+        self.user = create_user(
+            email='testuser@example.com',
+            password='testpassword123'
+        )
+
+        self.client.force_authenticate(self.user)
+        self.site = create_site(user=self.user)
+
+    def test_site_image_upload_with_existing_site(self):
+        """Test multiple image uploads with existing site"""
+        url = details_url(self.site.id)
+        payload = {
+            'uploaded_images': [get_image(), get_image()]
+        }
+
+        res = self.client.patch(url, payload, format='multipart')
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+    def test_site_image_upload_with_new_site(self):
+        """Test multiple image upload with new site"""
+        payload = {
+            'site_name': 'Test Site 4',
+            'site_type': 'cultural',
+            'uploaded_images': [get_image(), get_image()]
+        }
+
+        res = self.client.post(SITES_URL, payload, format='multipart')
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+
+        site_images = SiteImages.objects.filter(site_id=res.data['id'])
+        self.assertIn('images', res.data)
+        self.assertTrue(os.path.exists(site_images[0].images.path))
