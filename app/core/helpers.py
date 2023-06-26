@@ -6,8 +6,9 @@ import uuid
 import os
 from django.contrib.auth import get_user_model
 from core import models
-from rest_framework.test import APIClient # noqa
 import datetime
+from PIL import Image
+import tempfile
 
 
 def create_user(email, password):
@@ -58,3 +59,13 @@ def document_path(instance, filename):
     filename = f'{uuid.uuid4()}{dt}{milliseconds}{ext}'
 
     return os.path.join('uploads', class_name, filename)
+
+
+# Images
+def get_image():
+    """Creates and returns an image"""
+    image = Image.new("RGB", (10, 10))
+    file = tempfile.NamedTemporaryFile(suffix=".jpg")
+    image.save(file, format='JPEG')
+    _file = open(file.name, 'rb')
+    return _file

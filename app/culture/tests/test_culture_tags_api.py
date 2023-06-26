@@ -1,7 +1,8 @@
 """
 Test for culture tags
 """
-from core.helpers import create_user, APIClient
+from core.helpers import create_user
+from rest_framework.test import APIClient
 
 from django.test import TestCase
 from django.urls import reverse
