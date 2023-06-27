@@ -300,7 +300,24 @@
 - Add steps for running test and linting -> .github/workflows/checks.yml
 - Authenticate with docker hub and add secretsto the github project
 - Update or add the DOCKERHUB_TOKEN and DOCKERHUB_USER secrets on github
+
 <br/>
+
+10. ### Postgres DB access
+
+| syntax | Description |
+| ----------- | ----------- |
+| docker-compose up -d | run all services in the background |
+| docker ps | get the container id running the db |
+| docker exec -it <container_id> //bin/bash | access the container using bash |
+| psql -U <username> -d <DB_name> | access the psql shell by specifying the username and database name |
+| \c <db_name> | connect to the db |
+| \dt | list tables |
+
+**Using PgAdmin**
+- define your connection -> create a new server
+- add the database name
+- add the port that postgres container is running on
 
 ## Steps
 - Create the neccessary docker and docker-compose files.
