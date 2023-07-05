@@ -88,6 +88,16 @@
 - app/sites/apps
 - app/sites/views
 
+### **Artifacts App**
+- Used for creating, updating and viewing artifacts.
+
+**Sites App structure**
+- app/artifacts/tests/
+- app/artifacts/urls
+- app/artifacts/serializers
+- app/artifacts/apps
+- app/artifacts/views
+
 
 
 

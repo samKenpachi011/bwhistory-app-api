@@ -25,3 +25,10 @@ SITE_TYPE = (
     ('cultural', 'Cultural'),
     ('natural', 'Natural'),
 )
+
+ARTIFACT_TYPE = (
+    ('clothing', 'Clothing'),
+    ('jewelry', 'Jewelry'),
+    ('tool', 'Tool'),
+    ('other', 'Other'),
+)

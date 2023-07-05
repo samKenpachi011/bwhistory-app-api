@@ -10,7 +10,8 @@ from .choices import (
     EVENT_TYPE_CHOICES,
     CHIEF_TYPE,
     DOCUMENT_TYPE,
-    SITE_TYPE)
+    SITE_TYPE,
+    ARTIFACT_TYPE)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -198,3 +199,33 @@ class SiteImages(models.Model):
         blank=True
     )
     images = models.ImageField(null=True, upload_to=image_path)
+
+
+# Artifact model
+class Artifacts(models.Model):
+    """Class representing artifacts"""
+    artifact_name = models.CharField(max_length=100)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        on_delete=models.SET_NULL
+    )
+    artifact_type = models.CharField(max_length=100, choices=ARTIFACT_TYPE)
+    description = models.TextField(blank=True)
+    historical_significance = models.PositiveIntegerField(
+        default=1, blank=True, null=True)
+    cultural_significance = models.PositiveIntegerField(
+        default=1, blank=True, null=True)
+    ethnic_group = models.ForeignKey(
+        EthnicGroup,
+        on_delete=models.SET_NULL, null=True, blank=True)
+    culture = models.ForeignKey(
+        Culture,
+        on_delete=models.SET_NULL, null=True, blank=True)
+    site = models.ForeignKey(
+        Site,
+        on_delete=models.SET_NULL, null=True, blank=True
+    )
+
+    def __str__(self) -> str:
+        return self.artifact_name
