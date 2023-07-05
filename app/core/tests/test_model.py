@@ -327,3 +327,56 @@ class ModelTests(TestCase):
         path = '/vol/web/media/site_example.jpg'
         self.assertEqual(site_images.site, self.site)
         self.assertEqual(site_images.images.path, f'{path}')
+
+# Artifacts model tests
+    def test_create_artifact_success(self):
+        """Test creating artifacts model"""
+        user = create_user(
+            email='test@example.com',
+            password='testpass123'
+        )
+
+        # define the ethnic group and culture
+        ethnic_group = models.EthnicGroup.objects.create(
+            user=user,
+            name='Tswana',
+            description='The Tswana are a Bantu-speaking ethnic group',
+            language='Setswana',
+            population=10*100,
+            geography='Botswana',
+            history='A brief history of the Tswana ethnic group.'
+        )
+
+        culture = models.Culture.objects.create(
+            user=user,
+            ethnic_group=ethnic_group,
+            name='Test Culture',
+            description='Test culture'
+        )
+
+        site = models.Site.objects.create(
+            user=user,
+            site_name='Test Site',
+            ethnic_group=ethnic_group,
+            culture=culture,
+            site_type='Type Test',
+            importance=3.0,
+            sensitivity=3.0,
+            latitude=-24.653257,
+            longitude=25.906792,
+            description='Test Site Description'
+        )
+
+        artifact = models.Artifacts.objects.create(
+            user=user,
+            artifact_name='Test Artifact',
+            artifact_type='tool',
+            description='Test Artifact Description',
+            historical_significance=5.0,
+            cultural_significance=5.0,
+            ethnic_group=ethnic_group,
+            culture=culture,
+            site=site
+        )
+
+        self.assertEqual(str(artifact), artifact.artifact_name)
