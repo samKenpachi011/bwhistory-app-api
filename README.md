@@ -352,6 +352,7 @@
 - Add a chief app for creating, updating and viewing chiefs information
 - Add a publisher app for creating, updating and viewing published documents
 - Add a sites app for creating, updating and viewing sites information
+- Add a artifacts app for creating, updating and viewing artifact information
 
 
 ## Contributions
