@@ -12,3 +12,12 @@ class ArtifactsSerializer(serializers.ModelSerializer):
         model = Artifacts
         fields = ['id', 'artifact_name']
         read_only_fields = ['id']
+
+
+class ArtifactsDetailsSerializer(ArtifactsSerializer):
+    """Artifact details serializer for the Artifacts model."""
+
+    class Meta(ArtifactsSerializer.Meta):
+        fields = ArtifactsSerializer.Meta.fields + [
+            'description', 'artifact_type',
+            'historical_significance', 'cultural_significance']

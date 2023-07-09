@@ -10,7 +10,7 @@ from artifacts import serializers
 
 class ArtifactsViewSet(viewsets.ModelViewSet):
     """View for managing artifact information"""
-    serializer_class = serializers.ArtifactsSerializer
+    serializer_class = serializers.ArtifactsDetailsSerializer
     queryset = Artifacts.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -18,6 +18,13 @@ class ArtifactsViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """Returns artifact objects in descending order"""
         return self.queryset.order_by('-id')
+
+    def get_serializer_class(self):
+        """Return a serializer class for the request"""
+        if self.action == 'list':
+            return serializers.ArtifactsSerializer
+
+        return self.serializer_class
 
     def perform_create(self, serializer):
         """Create a new artifact"""

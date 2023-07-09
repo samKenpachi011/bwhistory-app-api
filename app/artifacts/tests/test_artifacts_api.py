@@ -8,7 +8,9 @@ from core.models import (
     Culture,
     Site,
     Artifacts)
-from artifacts.serializers import ArtifactsSerializer
+from artifacts.serializers import (
+    ArtifactsSerializer,
+    ArtifactsDetailsSerializer)
 
 
 ARTIFACTS_URL = reverse('artifacts:artifacts-list')
@@ -74,6 +76,11 @@ def create_artifact(user, **params):
     return artifact
 
 
+def details_url(artifact_id):
+    """Returns the details url"""
+    return reverse('artifacts:artifacts-detail', args=[artifact_id])
+
+
 class PublicArtifactsAPITests(TestCase):
     """Tests for unauthenticated users"""
 
@@ -128,3 +135,100 @@ class PrivateArtifactAPITests(TestCase):
         artifact = Artifacts.objects.get(id=res.data['id'])
         self.assertEqual(self.user, artifact.user)
         self.assertEqual(payload['artifact_name'], artifact.artifact_name)
+
+    def test_get_artifact_details(self):
+        """Test get artifact details"""
+        artifact = create_artifact(user=self.user)
+        url = details_url(artifact.id)
+        res = self.client.get(url)
+
+        serializer = ArtifactsDetailsSerializer(artifact)
+        self.assertEqual(res.data, serializer.data)
+
+    def test_delete_artifact(self):
+        """Test deleting an artifact"""
+        artifact = create_artifact(user=self.user)
+        url = details_url(artifact.id)
+
+        res = self.client.delete(url)
+
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Artifacts.objects.filter(id=artifact.id).exists())
+
+    def test_partial_artifact_update(self):
+        """Test partial update"""
+        artifact = create_artifact(user=self.user)
+        url = details_url(artifact.id)
+
+        payload = {
+            'artifact_name': 'Test Update',
+            'artifact_type': 'tool'
+        }
+
+        res = self.client.patch(url, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        artifact.refresh_from_db()
+        self.assertEqual(payload['artifact_type'], artifact.artifact_type)
+
+    def test_full_artifact_update(self):
+        """Test full update"""
+
+        artifact = create_artifact(user=self.user)
+        url = details_url(artifact.id)
+
+        group_defaults2 = {
+            'name': 'Tswana',
+            'description': 'The Tswana are a Bantu-speaking ethnic group',
+            'language': 'Setswana',
+            'population': 100,
+            'geography': 'Botswana',
+            'history': 'A brief history of the Tswana ethnic group.'
+        }
+
+        ethnic_group2 = EthnicGroup.objects.create(
+            user=self.user,
+            **group_defaults2
+        )
+
+        culture_defaults2 = {
+            'name': 'Test Culture',
+            'description': 'Test description',
+            'ethnic_group': ethnic_group2
+        }
+
+        culture2 = Culture.objects.create(user=self.user, **culture_defaults2)
+
+        site_defaults2 = {
+            'site_name': 'Test Site 2',
+            'ethnic_group': ethnic_group2,
+            'culture': culture2,
+            'site_type': 'cultural',
+            'importance': 2,
+            'sensitivity': 2,
+            'latitude': -24.653257,
+            'longitude': 25.906792,
+            'description': 'Test Site 2 description',
+        }
+
+        site2 = Site.objects.create(
+            user=self.user,
+            **site_defaults2
+        )
+
+        payload = {
+            'artifact_name': 'Test artifact full update',
+            'artifact_type': 'tool',
+            'description': 'Test full update description',
+            'historical_significance': 6.0,
+            'cultural_significance': 6.0,
+            'ethnic_group': ethnic_group2,
+            'culture': culture2,
+            'site': site2
+        }
+
+        res = self.client.patch(url, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        artifact.refresh_from_db()
+        self.assertEqual(payload['artifact_type'], artifact.artifact_type)
