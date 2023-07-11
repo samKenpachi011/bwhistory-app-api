@@ -229,3 +229,15 @@ class Artifacts(models.Model):
 
     def __str__(self) -> str:
         return self.artifact_name
+
+
+class ArtifactImages(models.Model):
+    """Class representing artifact images"""
+    artifact = models.ForeignKey(
+        Artifacts,
+        related_name='images',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
+    images = models.ImageField(null=True, upload_to=image_path)

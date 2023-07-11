@@ -229,7 +229,7 @@ class ModelTests(TestCase):
 # Generic document path test
     @patch('uuid.uuid4')
     def test_document_path(self, mock_uuid):
-        """Test creating an document path for instances"""
+        """Test creating a document path for instances"""
 
         uuid = 'test-uuid'
         mock_uuid.return_value = uuid
@@ -380,3 +380,61 @@ class ModelTests(TestCase):
         )
 
         self.assertEqual(str(artifact), artifact.artifact_name)
+
+    def test_create_artifact_images_success(self):
+        """Test creating artifacts images"""
+        user = create_user(
+            email='test@example.com',
+            password='testpass123'
+        )
+
+        # define the ethnic group and culture
+        ethnic_group = models.EthnicGroup.objects.create(
+            user=user,
+            name='Tswana',
+            description='The Tswana are a Bantu-speaking ethnic group',
+            language='Setswana',
+            population=10*100,
+            geography='Botswana',
+            history='A brief history of the Tswana ethnic group.'
+        )
+
+        culture = models.Culture.objects.create(
+            user=user,
+            ethnic_group=ethnic_group,
+            name='Test Culture',
+            description='Test culture'
+        )
+
+        site = models.Site.objects.create(
+            user=user,
+            site_name='Test Site',
+            ethnic_group=ethnic_group,
+            culture=culture,
+            site_type='Type Test',
+            importance=3.0,
+            sensitivity=3.0,
+            latitude=-24.653257,
+            longitude=25.906792,
+            description='Test Site Description'
+        )
+
+        self.artifact = models.Artifacts.objects.create(
+            user=user,
+            artifact_name='Test Artifact Images',
+            artifact_type='tool',
+            description='Test Artifact Description Images',
+            historical_significance=5.0,
+            cultural_significance=5.0,
+            ethnic_group=ethnic_group,
+            culture=culture,
+            site=site
+        )
+
+        artifact_images = models.ArtifactImages.objects.create(
+            artifact=self.artifact,
+            images='artifact_example.jpg',
+        )
+        path = '/vol/web/media/artifact_example.jpg'
+        self.assertEqual(artifact_images.artifact, self.artifact)
+        self.assertEqual(artifact_images.images.path, f'{path}')
