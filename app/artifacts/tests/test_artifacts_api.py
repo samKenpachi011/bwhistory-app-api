@@ -2,15 +2,17 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
-from core.helpers import create_user
+from core.helpers import create_user, get_image
 from core.models import (
     EthnicGroup,
     Culture,
     Site,
-    Artifacts)
+    Artifacts,
+    ArtifactImages)
 from artifacts.serializers import (
     ArtifactsSerializer,
     ArtifactsDetailsSerializer)
+import os
 
 
 ARTIFACTS_URL = reverse('artifacts:artifacts-list')
@@ -232,3 +234,47 @@ class PrivateArtifactAPITests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         artifact.refresh_from_db()
         self.assertEqual(payload['artifact_type'], artifact.artifact_type)
+
+
+class ArtifactImageUploadTests(TestCase):
+    """Tests for artifact image upload"""
+    def setUp(self):
+        self.client = APIClient()
+        self.user = create_user(
+            email='testuser@example.com',
+            password='testpassword123'
+        )
+
+        self.client.force_authenticate(self.user)
+        self.artifact = create_artifact(user=self.user)
+
+    def test_image_upload_with_new_artifact(self):
+        """Test image upload with new artifact"""
+        payload = {
+           'artifact_name': 'Test Artifact',
+           'artifact_type': 'tool',
+           'description': 'Test description',
+           'historical_significance': 5.0,
+           'cultural_significance': 5.0,
+           'uploaded_images': [get_image(), get_image()]
+        }
+
+        res = self.client.post(ARTIFACTS_URL, payload, format='multipart')
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+
+        artifact_imgs = ArtifactImages.objects.filter(
+            artifact_id=res.data['id'])
+        self.assertIn('images', res.data)
+        self.assertTrue(os.path.exists(artifact_imgs[0].images.path))
+
+    def test_image_upload_with_existing_artifact(self):
+        """Test image upload with existing artifact"""
+        url = details_url(self.artifact.id)
+        payload = {
+            'uploaded_images': [get_image(), get_image()]
+        }
+
+        res = self.client.patch(url, payload, format='multipart')
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
