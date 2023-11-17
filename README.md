@@ -20,6 +20,9 @@
 - requirements.txt -> for the application/production
 - requirements.dev.text -> for local development
 
+## API Management
+- API removal and deprecation process
+
 **Core App structure**
 - app/core/tests/
 - app/core/models
