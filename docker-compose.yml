@@ -20,6 +20,7 @@ services:
       - DB_NAME=devdb
       - DB_USER=django
       - DB_PASS=django
+      - DJANGO_SETTINGS_MODULE=app.settings
     depends_on:
       - db
 
